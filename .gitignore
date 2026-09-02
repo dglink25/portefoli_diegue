@@ -16,6 +16,7 @@ out/
 # ================================
 build/
 dist/
+public/uploads/
 
 # ================================
 # Environment variables / Secrets
