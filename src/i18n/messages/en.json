@@ -1,0 +1,67 @@
+{
+  "nav": {
+    "about": "About",
+    "skills": "Skills",
+    "projects": "Projects",
+    "experience": "Experience",
+    "reviews": "Reviews",
+    "blog": "Blog",
+    "contact": "Contact"
+  },
+  "hero": {
+    "eyebrow": "Portfolio",
+    "cta": "View my projects",
+    "contact": "Get in touch"
+  },
+  "about": {
+    "heading": "About"
+  },
+  "skills": {
+    "heading": "Skills"
+  },
+  "projects": {
+    "heading": "Projects",
+    "demo": "Live demo",
+    "repo": "Source code",
+    "empty": "No published projects yet."
+  },
+  "experience": {
+    "heading": "Experience",
+    "present": "Present"
+  },
+  "reviews": {
+    "heading": "Reviews",
+    "subheading": "What visitors say",
+    "average": "out of 5",
+    "count": "{count, plural, =0 {No reviews} one {# review} other {# reviews}}",
+    "leave": "Leave a review",
+    "name": "Full name",
+    "namePlaceholder": "Jane Doe",
+    "message": "Message",
+    "messagePlaceholder": "Share your experience...",
+    "rating": "Rating",
+    "submit": "Post review",
+    "submitted": "Thank you! Your review will appear once approved.",
+    "error": "Something went wrong. Please try again.",
+    "empty": "Be the first to leave a review."
+  },
+  "contact": {
+    "heading": "Contact",
+    "subheading": "A question, a project? Get in touch.",
+    "name": "Full name",
+    "email": "Email",
+    "subject": "Subject",
+    "message": "Message",
+    "submit": "Send",
+    "submitted": "Message sent, thank you!",
+    "error": "Something went wrong. Please try again."
+  },
+  "footer": {
+    "rights": "All rights reserved."
+  },
+  "theme": {
+    "light": "Light",
+    "dark": "Dark",
+    "system": "System"
+  }
+}
