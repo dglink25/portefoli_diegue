@@ -6,7 +6,9 @@ const withNextIntl = createNextIntlPlugin('./src/i18n/request.ts');
 const nextConfig = {
   output: 'standalone',
   images: {
-    remotePatterns: [{ protocol: 'https', hostname: '**' }]
+    remotePatterns: [{ protocol: 'https', hostname: '**' }],
+    // Autorise aussi les chemins locaux /uploads/
+    unoptimized: true,
   }
 };
 

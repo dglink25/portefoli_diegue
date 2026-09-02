@@ -1,6 +1,7 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useRouter, usePathname } from 'next/navigation';
 import {
   Home, User, Wrench, FolderKanban, Briefcase, Images,
   Star, Mail, Github, Linkedin, Globe, Menu, X, Sun, Moon,
@@ -8,7 +9,7 @@ import {
 import type { LucideIcon } from 'lucide-react';
 import type { Profile } from '@/types';
 import { useTheme } from 'next-themes';
-import { useEffect } from 'react';
+import { locales } from '@/i18n/config';
 
 const NAV: { id: string; label: string; Icon: LucideIcon }[] = [
   { id: 'hero',       label: 'Accueil',      Icon: Home },
@@ -50,11 +51,24 @@ export function SidebarNav({ profile, activeSection, locale }: {
     setMobileOpen(false);
   };
 
-  const switchLocale = (l: string) => {
-    const segs = window.location.pathname.split('/');
-    if (['fr','en'].includes(segs[1])) segs[1] = l === 'fr' ? '' : l;
-    else if (l !== 'fr') segs.unshift('', l);
-    window.location.href = segs.join('/').replace('//', '/') || '/';
+  const router   = useRouter();
+  const pathname = usePathname();
+
+  /** Même logique que NavBar */
+  const switchLocale = (next: string) => {
+    if (next === locale) return;
+    const segments = pathname.split('/');
+    const hasPrefix = locales.includes(segments[1] as any);
+    let nextPath: string;
+    if (next === 'fr') {
+      if (hasPrefix) segments.splice(1, 1);
+      nextPath = segments.join('/') || '/';
+    } else {
+      if (hasPrefix) { segments[1] = next; nextPath = segments.join('/'); }
+      else nextPath = `/${next}${pathname}`;
+    }
+    router.push(nextPath || '/');
+    router.refresh();
   };
 
   const NavContent = () => (

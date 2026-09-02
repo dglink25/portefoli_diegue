@@ -5,88 +5,68 @@ import { AdminShell } from '@/components/admin-shell';
 import { Plus, Trash2 } from 'lucide-react';
 import type { Experience } from '@/types';
 
-const empty = {
-  title_fr: '', title_en: '', company: '', location: '',
-  description_fr: '', description_en: '', start_date: '', end_date: '', order_index: 0
-};
+const EMPTY = { title_fr:'',title_en:'',company:'',location:'',description_fr:'',description_en:'',start_date:'',end_date:'',order_index:0 };
+const inp:React.CSSProperties = { width:'100%',background:'var(--c-bg3)',border:'1px solid var(--c-border)',borderRadius:8,color:'var(--c-ink)',padding:'.6rem .875rem',fontSize:'.83rem',fontFamily:'var(--ff-body)',outline:'none' };
+const f = { onFocus:(e:any)=>e.currentTarget.style.borderColor='var(--c-blue)', onBlur:(e:any)=>e.currentTarget.style.borderColor='var(--c-border)' };
 
 export default function ExperiencesAdminPage() {
   const [experiences, setExperiences] = useState<Experience[]>([]);
-  const [form, setForm] = useState(empty);
+  const [form, setForm] = useState({...EMPTY});
 
   async function load() {
     const res = await fetch('/api/admin/experiences');
-    const data = await res.json();
-    setExperiences(data.experiences ?? []);
+    setExperiences((await res.json()).experiences ?? []);
   }
-  useEffect(() => { load(); }, []);
+  useEffect(()=>{ load(); },[]);
 
-  async function handleCreate(e: React.FormEvent) {
+  async function handleCreate(e:React.FormEvent) {
     e.preventDefault();
-    await fetch('/api/admin/experiences', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ ...form, end_date: form.end_date || null })
-    });
-    setForm(empty);
-    load();
+    await fetch('/api/admin/experiences',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({...form,end_date:form.end_date||null})});
+    setForm({...EMPTY}); load();
   }
-
-  async function handleDelete(id: number) {
-    await fetch(`/api/admin/experiences/${id}`, { method: 'DELETE' });
-    load();
+  async function handleDelete(id:number) {
+    await fetch(`/api/admin/experiences/${id}`,{method:'DELETE'}); load();
   }
 
   return (
     <AdminShell title="Parcours">
-      <div className="grid gap-8 lg:grid-cols-[1fr_380px]">
-        <div className="flex flex-col gap-3">
-          {experiences.map((exp) => (
-            <div key={exp.id} className="flex items-center justify-between rounded-lg border border-border-light p-4 dark:border-border-dark">
+      <div className="admin-form-2col" style={{alignItems:'start',gap:'1.5rem'}}>
+        {/* List */}
+        <div style={{display:'flex',flexDirection:'column',gap:'.75rem'}}>
+          {experiences.length===0 && <p style={{fontSize:'.85rem',color:'var(--c-muted)'}}>Aucune expérience.</p>}
+          {experiences.map((exp)=>(
+            <div key={exp.id} style={{display:'flex',alignItems:'center',justifyContent:'space-between',padding:'.875rem 1rem',borderRadius:10,border:'1px solid var(--c-border)',background:'var(--c-bg2)'}}>
               <div>
-                <p className="text-sm font-medium">{exp.title_fr} · {exp.company}</p>
-                <p className="text-xs text-muted-light dark:text-muted-dark">{exp.start_date} → {exp.end_date ?? 'aujourd\u2019hui'}</p>
+                <p style={{fontSize:'.85rem',fontWeight:600,color:'var(--c-ink)'}}>{exp.title_fr} · {exp.company}</p>
+                <p style={{fontSize:'.72rem',color:'var(--c-muted)'}}>{exp.start_date} → {exp.end_date ?? "aujourd'hui"}</p>
               </div>
-              <button type="button" onClick={() => handleDelete(exp.id)} aria-label="Supprimer"
-                className="rounded-md p-2 text-muted-light hover:bg-red-50 hover:text-red-600 dark:text-muted-dark">
-                <Trash2 size={16} strokeWidth={1.75} />
+              <button onClick={()=>handleDelete(exp.id)} style={{padding:'.4rem',borderRadius:6,border:'none',background:'transparent',cursor:'pointer',color:'var(--c-muted)',transition:'all .2s'}}
+                onMouseEnter={(e)=>{const el=e.currentTarget;el.style.background='rgba(207,34,46,.08)';el.style.color='#cf222e';}}
+                onMouseLeave={(e)=>{const el=e.currentTarget;el.style.background='transparent';el.style.color='var(--c-muted)';}}>
+                <Trash2 size={15}/>
               </button>
             </div>
           ))}
-          {experiences.length === 0 && <p className="text-sm text-muted-light dark:text-muted-dark">Aucune experience.</p>}
         </div>
 
-        <form onSubmit={handleCreate} className="flex flex-col gap-3 rounded-lg border border-border-light p-5 dark:border-border-dark">
-          <p className="text-sm font-medium">Nouvelle experience</p>
-          <input required placeholder="Poste (FR)" value={form.title_fr}
-            onChange={(e) => setForm({ ...form, title_fr: e.target.value })}
-            className="rounded-md border border-border-light bg-transparent px-3 py-2 text-sm outline-none focus:border-primary dark:border-border-dark" />
-          <input required placeholder="Role (EN)" value={form.title_en}
-            onChange={(e) => setForm({ ...form, title_en: e.target.value })}
-            className="rounded-md border border-border-light bg-transparent px-3 py-2 text-sm outline-none focus:border-primary dark:border-border-dark" />
-          <input required placeholder="Entreprise" value={form.company}
-            onChange={(e) => setForm({ ...form, company: e.target.value })}
-            className="rounded-md border border-border-light bg-transparent px-3 py-2 text-sm outline-none focus:border-primary dark:border-border-dark" />
-          <input placeholder="Lieu" value={form.location}
-            onChange={(e) => setForm({ ...form, location: e.target.value })}
-            className="rounded-md border border-border-light bg-transparent px-3 py-2 text-sm outline-none focus:border-primary dark:border-border-dark" />
-          <div className="grid grid-cols-2 gap-3">
-            <input required type="date" value={form.start_date}
-              onChange={(e) => setForm({ ...form, start_date: e.target.value })}
-              className="rounded-md border border-border-light bg-transparent px-3 py-2 text-sm outline-none focus:border-primary dark:border-border-dark" />
-            <input type="date" value={form.end_date}
-              onChange={(e) => setForm({ ...form, end_date: e.target.value })}
-              className="rounded-md border border-border-light bg-transparent px-3 py-2 text-sm outline-none focus:border-primary dark:border-border-dark" />
+        {/* Form */}
+        <form onSubmit={handleCreate} style={{background:'var(--c-bg2)',border:'1px solid var(--c-border)',borderRadius:14,padding:'1.25rem',display:'flex',flexDirection:'column',gap:'.875rem'}}>
+          <p style={{fontFamily:'var(--ff-display)',fontSize:'.9rem',fontWeight:700,color:'var(--c-ink)'}}>Nouvelle expérience</p>
+          {[
+            {ph:'Poste (FR)',field:'title_fr'},{ph:'Role (EN)',field:'title_en'},
+            {ph:'Entreprise',field:'company'},{ph:'Lieu (optionnel)',field:'location'},
+          ].map(({ph,field})=>(
+            <input key={field} required={field!=='location'} placeholder={ph} value={(form as any)[field]} onChange={(e)=>setForm({...form,[field]:e.target.value})} style={inp} {...f}/>
+          ))}
+          <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:'1rem'}}>
+            <input required type="date" value={form.start_date} onChange={(e)=>setForm({...form,start_date:e.target.value})} style={inp} {...f}/>
+            <input type="date" placeholder="Fin (vide=présent)" value={form.end_date} onChange={(e)=>setForm({...form,end_date:e.target.value})} style={inp} {...f}/>
           </div>
-          <textarea placeholder="Description (FR)" rows={2} value={form.description_fr}
-            onChange={(e) => setForm({ ...form, description_fr: e.target.value })}
-            className="rounded-md border border-border-light bg-transparent px-3 py-2 text-sm outline-none focus:border-primary dark:border-border-dark" />
-          <textarea placeholder="Description (EN)" rows={2} value={form.description_en}
-            onChange={(e) => setForm({ ...form, description_en: e.target.value })}
-            className="rounded-md border border-border-light bg-transparent px-3 py-2 text-sm outline-none focus:border-primary dark:border-border-dark" />
-          <button type="submit"
-            className="mt-1 flex items-center justify-center gap-2 rounded-md bg-primary px-4 py-2 text-sm font-medium text-white hover:opacity-90">
-            <Plus size={16} strokeWidth={1.75} /> Ajouter
+          {[{ph:'Description (FR)',field:'description_fr'},{ph:'Description (EN)',field:'description_en'}].map(({ph,field})=>(
+            <textarea key={field} rows={2} placeholder={ph} value={(form as any)[field]} onChange={(e)=>setForm({...form,[field]:e.target.value})} style={{...inp,resize:'vertical'}} {...f}/>
+          ))}
+          <button type="submit" className="btn-primary" style={{justifyContent:'center'}}>
+            <Plus size={15}/> Ajouter
           </button>
         </form>
       </div>

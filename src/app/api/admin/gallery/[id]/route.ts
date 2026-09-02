@@ -7,7 +7,10 @@ import { z } from 'zod';
 const schema = z.object({
   title: z.string().min(1).max(200).optional(),
   description: z.string().max(500).optional().nullable(),
-  image_url: z.string().url().optional(),
+  image_url: z.string().refine(
+    (v) => v.startsWith('/') || v.startsWith('http://') || v.startsWith('https://'),
+    { message: 'Chemin image invalide' }
+  ).optional(),
   category: z.string().min(1).max(100).optional(),
   order_index: z.number().int().optional(),
   published: z.boolean().optional(),

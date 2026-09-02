@@ -5,71 +5,61 @@ import { AdminShell } from '@/components/admin-shell';
 import { Plus, Trash2 } from 'lucide-react';
 import type { Skill } from '@/types';
 
-const empty = { name: '', category: 'general', level: 3, order_index: 0 };
+const EMPTY = { name:'', category:'Langages', level:3, order_index:0 };
+const s = { inp:{ width:'100%', background:'var(--c-bg3)', border:'1px solid var(--c-border)', borderRadius:8, color:'var(--c-ink)', padding:'.6rem .875rem', fontSize:'.83rem', fontFamily:'var(--ff-body)', outline:'none' } as React.CSSProperties };
+const focus = { onFocus:(e:any)=>e.currentTarget.style.borderColor='var(--c-blue)', onBlur:(e:any)=>e.currentTarget.style.borderColor='var(--c-border)' };
 
 export default function SkillsAdminPage() {
   const [skills, setSkills] = useState<Skill[]>([]);
-  const [form, setForm] = useState(empty);
+  const [form, setForm] = useState({...EMPTY});
 
   async function load() {
     const res = await fetch('/api/admin/skills');
-    const data = await res.json();
-    setSkills(data.skills ?? []);
+    setSkills((await res.json()).skills ?? []);
   }
-  useEffect(() => { load(); }, []);
+  useEffect(()=>{ load(); },[]);
 
-  async function handleCreate(e: React.FormEvent) {
+  async function handleCreate(e:React.FormEvent) {
     e.preventDefault();
-    await fetch('/api/admin/skills', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(form)
-    });
-    setForm(empty);
-    load();
+    await fetch('/api/admin/skills',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(form)});
+    setForm({...EMPTY}); load();
   }
-
-  async function handleDelete(id: number) {
-    await fetch(`/api/admin/skills/${id}`, { method: 'DELETE' });
-    load();
+  async function handleDelete(id:number) {
+    await fetch(`/api/admin/skills/${id}`,{method:'DELETE'}); load();
   }
 
   return (
-    <AdminShell title="Competences">
-      <div className="grid gap-8 lg:grid-cols-[1fr_340px]">
-        <div className="flex flex-col gap-3">
-          {skills.map((s) => (
-            <div key={s.id} className="flex items-center justify-between rounded-lg border border-border-light p-4 dark:border-border-dark">
+    <AdminShell title="Compétences">
+      <div className="admin-form-2col" style={{alignItems:'start', gap:'1.5rem'}}>
+        {/* List */}
+        <div style={{display:'flex',flexDirection:'column',gap:'.75rem'}}>
+          {skills.length===0 && <p style={{fontSize:'.85rem',color:'var(--c-muted)'}}>Aucune compétence.</p>}
+          {skills.map((s)=>(
+            <div key={s.id} style={{display:'flex',alignItems:'center',justifyContent:'space-between',padding:'.875rem 1rem',borderRadius:10,border:'1px solid var(--c-border)',background:'var(--c-bg2)'}}>
               <div>
-                <p className="text-sm font-medium">{s.name}</p>
-                <p className="text-xs text-muted-light dark:text-muted-dark">{s.category} · niveau {s.level}/5</p>
+                <p style={{fontSize:'.85rem',fontWeight:600,color:'var(--c-ink)'}}>{s.name}</p>
+                <p style={{fontSize:'.72rem',color:'var(--c-muted)'}}>{s.category} · niveau {s.level}/5</p>
               </div>
-              <button type="button" onClick={() => handleDelete(s.id)} aria-label="Supprimer"
-                className="rounded-md p-2 text-muted-light hover:bg-red-50 hover:text-red-600 dark:text-muted-dark">
-                <Trash2 size={16} strokeWidth={1.75} />
+              <button onClick={()=>handleDelete(s.id)} style={{padding:'.4rem',borderRadius:6,border:'none',background:'transparent',cursor:'pointer',color:'var(--c-muted)',transition:'all .2s'}}
+                onMouseEnter={(e)=>{const el=e.currentTarget;el.style.background='rgba(207,34,46,.08)';el.style.color='#cf222e';}}
+                onMouseLeave={(e)=>{const el=e.currentTarget;el.style.background='transparent';el.style.color='var(--c-muted)';}}>
+                <Trash2 size={15}/>
               </button>
             </div>
           ))}
-          {skills.length === 0 && <p className="text-sm text-muted-light dark:text-muted-dark">Aucune competence.</p>}
         </div>
 
-        <form onSubmit={handleCreate} className="flex flex-col gap-3 rounded-lg border border-border-light p-5 dark:border-border-dark">
-          <p className="text-sm font-medium">Nouvelle competence</p>
-          <input required placeholder="Nom (ex: TypeScript)" value={form.name}
-            onChange={(e) => setForm({ ...form, name: e.target.value })}
-            className="rounded-md border border-border-light bg-transparent px-3 py-2 text-sm outline-none focus:border-primary dark:border-border-dark" />
-          <input required placeholder="Categorie (ex: Frontend)" value={form.category}
-            onChange={(e) => setForm({ ...form, category: e.target.value })}
-            className="rounded-md border border-border-light bg-transparent px-3 py-2 text-sm outline-none focus:border-primary dark:border-border-dark" />
-          <label className="text-sm">
-            Niveau : {form.level}/5
-            <input type="range" min={1} max={5} value={form.level}
-              onChange={(e) => setForm({ ...form, level: Number(e.target.value) })}
-              className="mt-1 w-full accent-primary" />
-          </label>
-          <button type="submit"
-            className="mt-1 flex items-center justify-center gap-2 rounded-md bg-primary px-4 py-2 text-sm font-medium text-white hover:opacity-90">
-            <Plus size={16} strokeWidth={1.75} /> Ajouter
+        {/* Form */}
+        <form onSubmit={handleCreate} style={{background:'var(--c-bg2)',border:'1px solid var(--c-border)',borderRadius:14,padding:'1.25rem',display:'flex',flexDirection:'column',gap:'.875rem'}}>
+          <p style={{fontFamily:'var(--ff-display)',fontSize:'.9rem',fontWeight:700,color:'var(--c-ink)'}}>Nouvelle compétence</p>
+          <input required placeholder="Nom (ex: TypeScript)" value={form.name} onChange={(e)=>setForm({...form,name:e.target.value})} style={s.inp} {...focus}/>
+          <input required placeholder="Catégorie (ex: Frontend)" value={form.category} onChange={(e)=>setForm({...form,category:e.target.value})} style={s.inp} {...focus}/>
+          <div>
+            <label style={{fontSize:'.82rem',color:'var(--c-ink)'}}>Niveau : <strong style={{color:'var(--c-blue)'}}>{form.level}/5</strong></label>
+            <input type="range" min={1} max={5} value={form.level} onChange={(e)=>setForm({...form,level:Number(e.target.value)})} style={{width:'100%',marginTop:6,accentColor:'var(--c-blue)'}}/>
+          </div>
+          <button type="submit" className="btn-primary" style={{justifyContent:'center'}}>
+            <Plus size={15}/> Ajouter
           </button>
         </form>
       </div>

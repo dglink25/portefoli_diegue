@@ -114,7 +114,7 @@ export function ImageUpload({
       {/* URL input */}
       <div style={{ display: 'flex', gap: 6 }}>
         <input
-          type="url"
+          type="text"
           value={value}
           onChange={(e) => { setError(''); onChange(e.target.value); }}
           placeholder={placeholder}
