@@ -2,9 +2,15 @@
 
 import { useState } from 'react';
 import { Send, Mail, Phone, MapPin, Clock } from 'lucide-react';
+import type { Profile } from '@/types';
 
-export function ContactSection() {
+export function ContactSection({ profile }: { profile: Profile | null }) {
   const [status, setStatus] = useState<'idle'|'loading'|'ok'|'err'>('idle');
+  const email   = profile?.email    || 'dondiegue21@gmail.com';
+  const phone   = '+229 01 94 11 94 76';
+  const loc     = profile?.location || 'Lokossa, Bénin';
+  const social  = (profile?.social_links ?? {}) as Record<string,string>;
+  const waHref  = social.whatsapp || `https://wa.me/22901941194`;
 
   async function submit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault(); setStatus('loading');
@@ -33,9 +39,9 @@ export function ContactSection() {
             <div style={{ background: 'var(--c-bg2)', border: '1px solid var(--c-border)', borderRadius: 14, padding: '1.5rem' }}>
               <h3 style={{ fontFamily: 'var(--ff-display)', fontSize: '0.95rem', fontWeight: 700, color: 'var(--c-ink)', marginBottom: '1.25rem' }}>Informations de contact</h3>
               {[
-                { Icon: Mail,  label: 'EMAIL',              val: 'dondiegue21@gmail.com',   href: 'mailto:dondiegue21@gmail.com' },
-                { Icon: Phone, label: 'TÉLÉPHONE / WHATSAPP', val: '+229 01 94 11 94 76',   href: 'tel:+22901941194' },
-                { Icon: MapPin,label: 'LOCALISATION',       val: 'Lokossa, Bénin',          href: null },
+                { Icon: Mail,  label: 'EMAIL',              val: email,   href: `mailto:${email}` },
+                { Icon: Phone, label: 'TÉLÉPHONE / WHATSAPP', val: phone,   href: waHref },
+                { Icon: MapPin,label: 'LOCALISATION',       val: loc,          href: null },
                 { Icon: Clock, label: 'DISPONIBILITÉ',      val: 'Télétravail ou présentiel', href: null },
               ].map(({ Icon, label, val, href }) => (
                 <div key={label} style={{ display: 'flex', alignItems: 'flex-start', gap: 12, marginBottom: '1rem' }}>
@@ -59,7 +65,7 @@ export function ContactSection() {
             <div style={{ background: 'var(--c-bg2)', border: '1px solid var(--c-border)', borderRadius: 14, padding: '1.5rem' }}>
               <h3 style={{ fontFamily: 'var(--ff-display)', fontSize: '0.95rem', fontWeight: 700, color: 'var(--c-ink)', marginBottom: '0.5rem' }}>Travaillons ensemble</h3>
               <p style={{ fontSize: '0.82rem', color: 'var(--c-muted)', marginBottom: '1rem', lineHeight: 1.6 }}>Disponible pour des missions freelance, des projets collaboratifs ou simplement échanger sur la tech.</p>
-              <a href="mailto:dondiegue21@gmail.com" className="btn-primary" style={{ fontSize: '0.82rem', padding: '0.6rem 1.25rem' }}>
+              <a href={`mailto:${email}`} className="btn-primary" style={{ fontSize: '0.82rem', padding: '0.6rem 1.25rem' }}>
                 <Mail size={14} /> Envoyer un email
               </a>
             </div>

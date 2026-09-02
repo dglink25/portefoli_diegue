@@ -73,11 +73,11 @@ export function PortfolioLayout({ profile, skills, projects, experiences, review
         <ExperienceSection experiences={experiences} locale={locale} />
         <GallerySection items={gallery} />
         <ReviewsSection reviews={reviews} locale={locale} />
-        <ContactSection />
+        <ContactSection profile={profile} />
 
         {/* Footer */}
         <footer className="border-t border-border px-8 py-6 text-center text-xs text-muted">
-          <p>© {new Date().getFullYear()} Hotègni Diègue HOUNDOKINNOU — Tous droits réservés</p>
+          <p>© {new Date().getFullYear()} Hotègni Diègue HOUNDOKINNOU - Tous droits réservés</p>
           <p className="mt-1">Conçu &amp; développé avec Next.js · Lokossa, Bénin</p>
         </footer>
       </main>

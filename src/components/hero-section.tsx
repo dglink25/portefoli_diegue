@@ -114,8 +114,9 @@ export function HeroSection({ profile, locale }: { profile: Profile | null; loca
             <div className="anim-spin-slow" style={{ position: 'absolute', inset: -8, borderRadius: '50%', border: '1.5px dashed var(--c-border)' }} />
             <div style={{ position: 'absolute', inset: -16, borderRadius: '50%', border: '1px solid var(--c-border)', opacity: 0.4 }} />
             <div className="anim-pulse-glow" style={{ width: '100%', height: '100%', borderRadius: '50%', overflow: 'hidden', border: '3px solid var(--c-blue)', background: 'var(--c-bg3)' }}>
-              {profile?.avatar_url
-                ? <img src={profile.avatar_url} alt={profile.full_name} style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'top' }} /> // eslint-disable-line
+              {/* hero_image_url en priorité, sinon avatar_url, sinon placeholder */}
+              {(profile?.hero_image_url || profile?.avatar_url)
+                ? <img src={profile.hero_image_url || profile.avatar_url!} alt={profile.full_name} style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'top' }} /> // eslint-disable-line
                 : <div style={{ width: '100%', height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', background: 'var(--c-bg3)' }}>
                     <span style={{ fontFamily: 'var(--ff-display)', fontSize: '3rem', fontWeight: 700, color: 'var(--c-border)' }}>DH</span>
                     <span style={{ fontSize: '0.6rem', color: 'var(--c-muted)', marginTop: 8, textAlign: 'center', padding: '0 1rem' }}>

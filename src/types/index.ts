@@ -5,7 +5,8 @@ export interface Profile {
   title_en: string;
   bio_fr: string;
   bio_en: string;
-  avatar_url: string | null;
+  avatar_url: string | null;      // Photo section À propos
+  hero_image_url: string | null;  // Photo cercle Hero (peut différer)
   email: string | null;
   location: string | null;
   social_links: Record<string, string>;

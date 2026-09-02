@@ -61,7 +61,7 @@ export function PortfolioPage({ profile, skills, projects, experiences, reviews,
       <ProjectsSection projects={projects} locale={locale} />
       <GallerySection items={gallery} />
       <ReviewsSection reviews={reviews} locale={locale} />
-      <ContactSection />
+      <ContactSection profile={profile} />
       <SiteFooter profile={profile} />
     </>
   );

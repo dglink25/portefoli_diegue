@@ -18,7 +18,7 @@ export async function PUT(req: Request) {
 
   const fields = [
     'full_name', 'title_fr', 'title_en', 'bio_fr', 'bio_en',
-    'avatar_url', 'email', 'location', 'social_links'
+    'avatar_url', 'hero_image_url', 'email', 'location', 'social_links'
   ];
   const entries = fields.filter((f) => body[f] !== undefined).map((f) => [f, body[f]]);
   if (entries.length === 0) return NextResponse.json({ error: 'empty_payload' }, { status: 400 });

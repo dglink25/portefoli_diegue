@@ -34,7 +34,7 @@ export function ProjectsSection({ projects, locale }: { projects: Project[]; loc
                   <div className="proj-num">{String(idx + 1).padStart(2, '0')}</div>
                   {p.featured && (
                     <div style={{ position: 'absolute', top: '1rem', right: '1rem', zIndex: 2, display: 'flex', alignItems: 'center', gap: 4, background: 'rgba(130,80,223,0.15)', border: '1px solid rgba(130,80,223,0.3)', borderRadius: 20, padding: '3px 10px', fontSize: '0.68rem', fontWeight: 700, color: 'var(--c-purple)' }}>
-                      <Star size={10} fill="currentColor" /> Vedette
+                      <Star size={10} fill="currentColor" /> Brouillon
                     </div>
                   )}
 

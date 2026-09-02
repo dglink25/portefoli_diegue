@@ -54,21 +54,15 @@ export function SidebarNav({ profile, activeSection, locale }: {
   const router   = useRouter();
   const pathname = usePathname();
 
-  /** Même logique que NavBar */
+  /** Même logique que NavBar — rechargement complet pour Server Component */
   const switchLocale = (next: string) => {
     if (next === locale) return;
-    const segments = pathname.split('/');
-    const hasPrefix = locales.includes(segments[1] as any);
-    let nextPath: string;
-    if (next === 'fr') {
-      if (hasPrefix) segments.splice(1, 1);
-      nextPath = segments.join('/') || '/';
-    } else {
-      if (hasPrefix) { segments[1] = next; nextPath = segments.join('/'); }
-      else nextPath = `/${next}${pathname}`;
-    }
-    router.push(nextPath || '/');
-    router.refresh();
+    const segs = pathname.split('/').filter(Boolean);
+    const hasPrefix = segs[0] === 'en' || segs[0] === 'fr';
+    const rest = hasPrefix ? segs.slice(1) : segs;
+    const restPath = rest.length > 0 ? '/' + rest.join('/') : '/';
+    const target = next === 'fr' ? restPath : `/en${restPath === '/' ? '' : restPath}`;
+    window.location.href = target || '/';
   };
 
   const NavContent = () => (
