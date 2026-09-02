@@ -1,4 +1,5 @@
 import type { Skill } from '@/types';
+import { Code2 } from 'lucide-react';
 
 /* Icon URLs from devicons CDN */
 const SKILL_ICONS: Record<string, string> = {

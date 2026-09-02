@@ -9,11 +9,31 @@
 @import '@fontsource/space-grotesk/600.css';
 @import '@fontsource/space-grotesk/700.css';
 
+/* ═══════════════════════════════════════════
+   DESIGN TOKENS — Light (default)
+═══════════════════════════════════════════ */
 :root {
   --ff-display: 'Space Grotesk', sans-serif;
   --ff-body: 'Inter', sans-serif;
 
-  /* Dark theme only - exact Epiphane palette */
+  --c-bg:       #f6f8fa;
+  --c-bg2:      #ffffff;
+  --c-bg3:      #f0f2f5;
+  --c-border:   #d0d7de;
+  --c-ink:      #1c2128;
+  --c-muted:    #57606a;
+  --c-blue:     #0969da;
+  --c-blue-dim: #0550ae;
+  --c-green:    #1a7f37;
+  --c-purple:   #8250df;
+  --c-accent:   #0550ae;
+  --c-shadow:   rgba(31,35,40,0.1);
+}
+
+/* ═══════════════════════════════════════════
+   DESIGN TOKENS — Dark
+═══════════════════════════════════════════ */
+.dark {
   --c-bg:       #0d1117;
   --c-bg2:      #161b22;
   --c-bg3:      #1c2333;
@@ -25,30 +45,30 @@
   --c-green:    #3fb950;
   --c-purple:   #bc8cff;
   --c-accent:   #79c0ff;
+  --c-shadow:   rgba(1,4,9,0.4);
 }
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
 html { scroll-behavior: smooth; font-size: 16px; }
-
 body {
   background: var(--c-bg);
   color: var(--c-ink);
   font-family: var(--ff-body);
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
+  transition: background 0.25s, color 0.25s;
 }
 
-/* ── scrollbar ── */
+/* ── Scrollbar ── */
 ::-webkit-scrollbar { width: 5px; }
 ::-webkit-scrollbar-track { background: var(--c-bg); }
 ::-webkit-scrollbar-thumb { background: var(--c-border); border-radius: 3px; }
 ::-webkit-scrollbar-thumb:hover { background: var(--c-blue-dim); }
 
-/* ── focus ── */
+/* ── Focus ── */
 :focus-visible { outline: 2px solid var(--c-blue); outline-offset: 3px; }
 
-/* ── section label ── */
+/* ── Section helpers ── */
 .sec-label {
   font-size: 0.7rem;
   font-weight: 700;
@@ -57,8 +77,6 @@ body {
   color: var(--c-blue);
   margin-bottom: 0.5rem;
 }
-
-/* ── section heading ── */
 .sec-title {
   font-family: var(--ff-display);
   font-size: clamp(1.6rem, 3vw, 2.4rem);
@@ -66,7 +84,6 @@ body {
   color: var(--c-ink);
   line-height: 1.2;
 }
-
 .sec-divider {
   width: 3rem;
   height: 3px;
@@ -76,17 +93,20 @@ body {
   margin-bottom: 1.5rem;
 }
 
-/* ── animations ── */
+/* ── Animations ── */
 @keyframes fadeUp {
   from { opacity: 0; transform: translateY(20px); }
   to   { opacity: 1; transform: translateY(0); }
 }
-@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 @keyframes float {
   0%, 100% { transform: translateY(0); }
   50%       { transform: translateY(-8px); }
 }
 @keyframes pulse-glow {
+  0%,100% { box-shadow: 0 0 0 0 rgba(9,105,218,0.3); }
+  50%     { box-shadow: 0 0 0 12px rgba(9,105,218,0); }
+}
+.dark @keyframes pulse-glow {
   0%,100% { box-shadow: 0 0 0 0 rgba(88,166,255,0.3); }
   50%     { box-shadow: 0 0 0 12px rgba(88,166,255,0); }
 }
@@ -117,11 +137,15 @@ body {
 .cursor-blink   { animation: blink 1s step-end infinite; }
 .panel-slide-in { animation: slide-in-right 0.3s ease both; }
 
-/* ── reveal on scroll ── */
-.reveal { opacity: 0; transform: translateY(20px); transition: opacity 0.6s ease, transform 0.6s ease; }
+/* ── Reveal on scroll ── */
+.reveal {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
 .reveal.visible { opacity: 1; transform: translateY(0); }
 
-/* ── gradient text ── */
+/* ── Gradient text ── */
 .grad-text {
   background: linear-gradient(135deg, var(--c-blue) 0%, var(--c-purple) 50%, var(--c-accent) 100%);
   background-size: 200% 200%;
@@ -131,7 +155,7 @@ body {
   background-clip: text;
 }
 
-/* ── nav link ── */
+/* ── Nav link ── */
 .nav-link {
   font-size: 0.875rem;
   font-weight: 500;
@@ -156,20 +180,7 @@ body {
 .nav-link:hover::after, .nav-link.active::after { width: 100%; }
 .nav-link.active { color: var(--c-blue); }
 
-/* ── card ── */
-.card {
-  background: var(--c-bg2);
-  border: 1px solid var(--c-border);
-  border-radius: 12px;
-  transition: border-color 0.25s, box-shadow 0.25s, transform 0.25s;
-}
-.card:hover {
-  border-color: rgba(88,166,255,0.4);
-  box-shadow: 0 4px 24px rgba(88,166,255,0.1);
-  transform: translateY(-3px);
-}
-
-/* ── btn primary ── */
+/* ── Buttons ── */
 .btn-primary {
   display: inline-flex;
   align-items: center;
@@ -184,21 +195,10 @@ body {
   cursor: pointer;
   text-decoration: none;
   transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
-  position: relative;
-  overflow: hidden;
+  font-family: var(--ff-body);
 }
-.btn-primary::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(135deg, rgba(255,255,255,0.1), transparent);
-  opacity: 0;
-  transition: opacity 0.2s;
-}
-.btn-primary:hover { background: #388bfd; transform: translateY(-2px); box-shadow: 0 6px 20px rgba(88,166,255,0.3); }
-.btn-primary:hover::before { opacity: 1; }
+.btn-primary:hover { background: var(--c-blue); transform: translateY(-2px); box-shadow: 0 6px 20px var(--c-shadow); }
 
-/* ── btn outline ── */
 .btn-outline {
   display: inline-flex;
   align-items: center;
@@ -213,10 +213,11 @@ body {
   cursor: pointer;
   text-decoration: none;
   transition: border-color 0.2s, color 0.2s, transform 0.2s;
+  font-family: var(--ff-body);
 }
 .btn-outline:hover { border-color: var(--c-blue); color: var(--c-blue); transform: translateY(-2px); }
 
-/* ── skill chip ── */
+/* ── Skill chip ── */
 .skill-chip {
   display: inline-flex;
   flex-direction: column;
@@ -235,26 +236,30 @@ body {
   text-align: center;
 }
 .skill-chip:hover {
-  border-color: rgba(88,166,255,0.5);
-  color: var(--c-accent);
-  background: rgba(88,166,255,0.05);
+  border-color: var(--c-blue);
+  color: var(--c-blue);
+  background: var(--c-bg2);
   transform: translateY(-2px);
 }
 .skill-chip img { width: 2rem; height: 2rem; object-fit: contain; }
 
-/* ── tech badge ── */
+/* ── Tech badge ── */
 .tech-badge {
   display: inline-block;
   padding: 0.2rem 0.6rem;
-  background: rgba(88,166,255,0.1);
+  background: rgba(9,105,218,0.08);
   color: var(--c-blue);
   font-size: 0.7rem;
   font-weight: 600;
   border-radius: 6px;
-  border: 1px solid rgba(88,166,255,0.2);
+  border: 1px solid rgba(9,105,218,0.2);
+}
+.dark .tech-badge {
+  background: rgba(88,166,255,0.1);
+  border-color: rgba(88,166,255,0.2);
 }
 
-/* ── project card ── */
+/* ── Cards ── */
 .proj-card {
   position: relative;
   overflow: hidden;
@@ -265,8 +270,8 @@ body {
   transition: all 0.3s;
 }
 .proj-card:hover {
-  border-color: rgba(88,166,255,0.5);
-  box-shadow: 0 8px 32px rgba(88,166,255,0.12);
+  border-color: var(--c-blue);
+  box-shadow: 0 8px 32px var(--c-shadow);
   transform: translateY(-4px);
 }
 .proj-num {
@@ -286,14 +291,27 @@ body {
   border-radius: 50%;
 }
 
-/* ── timeline ── */
+.exp-card {
+  background: var(--c-bg2);
+  border: 1px solid var(--c-border);
+  border-radius: 12px;
+  padding: 1.5rem;
+  transition: all 0.25s;
+}
+.exp-card:hover {
+  border-color: var(--c-blue);
+  box-shadow: 0 4px 20px var(--c-shadow);
+  transform: translateY(-2px);
+}
+
+/* ── Timeline ── */
 .timeline-line {
   position: absolute;
   left: 1.25rem;
   top: 0;
   bottom: 0;
   width: 1px;
-  background: linear-gradient(to bottom, var(--c-blue), rgba(88,166,255,0.1));
+  background: linear-gradient(to bottom, var(--c-blue), transparent);
 }
 .timeline-dot {
   position: absolute;
@@ -308,23 +326,10 @@ body {
   border: 2px solid var(--c-blue);
   border-radius: 50%;
   z-index: 1;
+  color: var(--c-blue);
 }
 
-/* ── expertise card ── */
-.exp-card {
-  background: var(--c-bg2);
-  border: 1px solid var(--c-border);
-  border-radius: 12px;
-  padding: 1.5rem;
-  transition: all 0.25s;
-}
-.exp-card:hover {
-  border-color: rgba(88,166,255,0.4);
-  box-shadow: 0 0 20px rgba(88,166,255,0.08);
-  transform: translateY(-2px);
-}
-
-/* ── input ── */
+/* ── Input ── */
 .inp {
   width: 100%;
   background: var(--c-bg3);
@@ -340,11 +345,15 @@ body {
 .inp:focus { border-color: var(--c-blue); }
 .inp::placeholder { color: var(--c-muted); opacity: 0.6; }
 
-/* ── scrolled navbar ── */
+/* ── Navbar scrolled ── */
 .navbar-scrolled {
-  background: rgba(13,17,23,0.95);
+  background: rgba(246,248,250,0.95);
   backdrop-filter: blur(12px);
   border-bottom: 1px solid var(--c-border);
+  box-shadow: 0 1px 8px var(--c-shadow);
+}
+.dark .navbar-scrolled {
+  background: rgba(13,17,23,0.95);
 }
 
 @media (prefers-reduced-motion: reduce) {

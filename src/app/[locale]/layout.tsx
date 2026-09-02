@@ -1,5 +1,6 @@
 import { NextIntlClientProvider } from 'next-intl';
 import { getMessages } from 'next-intl/server';
+import { ThemeProvider } from '@/components/theme-provider';
 import type { Metadata } from 'next';
 import '../globals.css';
 
@@ -19,9 +20,12 @@ export default async function LocaleLayout({
   return (
     <html lang={params.locale} suppressHydrationWarning>
       <body>
-        <NextIntlClientProvider messages={messages}>
-          {children}
-        </NextIntlClientProvider>
+        {/* defaultTheme="light" — thème clair par défaut, personnalisable */}
+        <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
+          <NextIntlClientProvider messages={messages}>
+            {children}
+          </NextIntlClientProvider>
+        </ThemeProvider>
       </body>
     </html>
   );
