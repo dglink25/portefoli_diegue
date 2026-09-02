@@ -9,23 +9,28 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        primary: { DEFAULT: '#0066FF' },
-        accent: '#63b3ed',
-        bg: '#0A0B0F',
-        surface: '#101218',
-        surface2: '#161921',
-        ink: '#E6E8F0',
-        muted: '#8C94A5',
-        border: { DEFAULT: '#232732' },
+        /* ── Portfolio public (CSS vars) ── */
+        primary: { DEFAULT: '#0069DA' },
+        accent:  '#63b3ed',
+
+        /* ── Admin backoffice (tokens explicites light/dark) ── */
+        'canvas-light': '#F6F8FA',
+        'canvas-dark':  '#0D1117',
+        'surface-light': '#FFFFFF',
+        'surface-dark':  '#161B22',
+        'border-light':  '#D0D7DE',
+        'border-dark':   '#30363D',
+        'ink-light':     '#1C2128',
+        'ink-dark':      '#E6EDF3',
+        'muted-light':   '#57606A',
+        'muted-dark':    '#8B949E',
       },
       fontFamily: {
-        display: ['var(--font-display)'],
-        body: ['var(--font-body)']
+        display: ['var(--ff-display)', 'Space Grotesk', 'sans-serif'],
+        body:    ['var(--ff-body)',    'Inter',         'sans-serif'],
       },
       maxWidth: { content: '1200px' },
-      screens: {
-        xs: '480px',
-      },
+      screens:  { xs: '480px' },
     }
   },
   plugins: []

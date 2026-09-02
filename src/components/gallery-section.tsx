@@ -41,7 +41,7 @@ export function GallerySection({ items }: { items: GalleryItem[] }) {
         </div>
 
         {/* Masonry */}
-        <div className="reveal" style={{ columns: 'auto', columnWidth: 220, gap: '1rem' }}>
+        <div className="gallery-masonry reveal">
           {filtered.map((item, idx) => (
             <div
               key={item.id}

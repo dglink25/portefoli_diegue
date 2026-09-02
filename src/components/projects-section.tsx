@@ -23,7 +23,7 @@ export function ProjectsSection({ projects, locale }: { projects: Project[]; loc
             <p>Ajoutez vos projets via <strong>/admin/projects</strong></p>
           </div>
         ) : (
-          <div className="reveal" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '1.5rem' }}>
+          <div className="reveal projects-grid">
             {projects.map((p, idx) => {
               const title = locale === 'fr' ? p.title_fr : p.title_en;
               const desc  = locale === 'fr' ? p.description_fr : p.description_en;

@@ -1,0 +1,30 @@
+# ════════════════════════════════════════════════════════
+#  Dockerfile de DÉVELOPPEMENT
+#  - Cache npm via BuildKit mount (réutilise le cache entre builds)
+#  - Lance "npm run dev" avec hot-reload via volume monté
+# ════════════════════════════════════════════════════════
+
+# syntax=docker/dockerfile:1
+FROM node:20-alpine
+WORKDIR /app
+
+RUN apk add --no-cache libc6-compat
+
+# Copier package.json pour profiter du cache de layers Docker
+COPY package.json package-lock.json* ./
+
+# npm install avec cache BuildKit (beaucoup plus rapide aux rebuilds)
+RUN --mount=type=cache,target=/root/.npm \
+    npm install --fetch-timeout 600000 --prefer-offline
+
+# Copier le code source (sera de toute façon écrasé par le bind mount)
+COPY . .
+
+ENV NODE_ENV=development
+ENV NEXT_TELEMETRY_DISABLED=1
+ENV PORT=3000
+ENV HOSTNAME=0.0.0.0
+
+EXPOSE 3000
+
+CMD ["npm", "run", "dev"]

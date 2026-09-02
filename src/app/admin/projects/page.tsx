@@ -2,17 +2,21 @@
 
 import { useEffect, useState } from 'react';
 import { AdminShell } from '@/components/admin-shell';
+import { ImageUpload } from '@/components/image-upload';
 import { Plus, Trash2 } from 'lucide-react';
 import type { Project } from '@/types';
 
-const empty = {
+const EMPTY = {
   slug: '', title_fr: '', title_en: '', description_fr: '', description_en: '',
-  cover_image: '', tags: '', demo_url: '', repo_url: '', featured: false, published: true, order_index: 0
+  cover_image: '', tags: '', demo_url: '', repo_url: '', featured: false, published: true, order_index: 0,
 };
+
+const inp: React.CSSProperties = { width: '100%', background: 'var(--c-bg3)', border: '1px solid var(--c-border)', borderRadius: 8, color: 'var(--c-ink)', padding: '0.6rem 0.875rem', fontSize: '0.83rem', fontFamily: 'var(--ff-body)', outline: 'none' };
+const lbl: React.CSSProperties = { display: 'block', fontSize: '0.66rem', fontWeight: 700, textTransform: 'uppercase' as const, letterSpacing: '0.1em', color: 'var(--c-muted)', marginBottom: 5 };
 
 export default function ProjectsAdminPage() {
   const [projects, setProjects] = useState<Project[]>([]);
-  const [form, setForm] = useState(empty);
+  const [form, setForm] = useState({ ...EMPTY });
   const [loading, setLoading] = useState(false);
 
   async function load() {
@@ -34,7 +38,7 @@ export default function ProjectsAdminPage() {
         tags: form.tags.split(',').map((t) => t.trim()).filter(Boolean)
       })
     });
-    setForm(empty);
+    setForm({ ...EMPTY });
     setLoading(false);
     load();
   }
@@ -46,59 +50,69 @@ export default function ProjectsAdminPage() {
 
   return (
     <AdminShell title="Projets">
-      <div className="grid gap-8 lg:grid-cols-[1fr_380px]">
-        <div className="flex flex-col gap-3">
+      <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0,1fr) minmax(0,400px)', gap: '2rem', alignItems: 'start' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
           {projects.map((p) => (
-            <div key={p.id} className="flex items-center justify-between rounded-lg border border-border-light p-4 dark:border-border-dark">
+            <div key={p.id} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0.875rem 1rem', borderRadius: 10, border: '1px solid var(--c-border)', background: 'var(--c-bg2)' }}>
               <div>
-                <p className="text-sm font-medium">{p.title_fr}</p>
-                <p className="text-xs text-muted-light dark:text-muted-dark">/{p.slug} · {p.published ? 'publie' : 'brouillon'}</p>
+                <p style={{ fontSize: '0.85rem', fontWeight: 600, color: 'var(--c-ink)' }}>{p.title_fr}</p>
+                <p style={{ fontSize: '0.72rem', color: 'var(--c-muted)' }}>/{p.slug} · {p.published ? 'publié' : 'brouillon'}</p>
               </div>
-              <button type="button" onClick={() => handleDelete(p.id)} aria-label="Supprimer"
-                className="rounded-md p-2 text-muted-light hover:bg-red-50 hover:text-red-600 dark:text-muted-dark">
+              <button type="button" onClick={() => handleDelete(p.id)}
+                style={{ padding: '0.4rem', borderRadius: 6, border: 'none', background: 'transparent', cursor: 'pointer', color: 'var(--c-muted)', transition: 'all 0.2s' }}
+                onMouseEnter={(e) => { const el = e.currentTarget; el.style.background = 'rgba(207,34,46,0.08)'; el.style.color = '#cf222e'; }}
+                onMouseLeave={(e) => { const el = e.currentTarget; el.style.background = 'transparent'; el.style.color = 'var(--c-muted)'; }}>
                 <Trash2 size={16} strokeWidth={1.75} />
               </button>
             </div>
           ))}
-          {projects.length === 0 && <p className="text-sm text-muted-light dark:text-muted-dark">Aucun projet.</p>}
+          {projects.length === 0 && <p style={{ fontSize: '0.85rem', color: 'var(--c-muted)' }}>Aucun projet.</p>}
         </div>
 
-        <form onSubmit={handleCreate} className="flex flex-col gap-3 rounded-lg border border-border-light p-5 dark:border-border-dark">
-          <p className="text-sm font-medium">Nouveau projet</p>
-          <input required placeholder="slug (ex: mon-projet)" value={form.slug}
-            onChange={(e) => setForm({ ...form, slug: e.target.value })}
-            className="rounded-md border border-border-light bg-transparent px-3 py-2 text-sm outline-none focus:border-primary dark:border-border-dark" />
-          <input required placeholder="Titre (FR)" value={form.title_fr}
-            onChange={(e) => setForm({ ...form, title_fr: e.target.value })}
-            className="rounded-md border border-border-light bg-transparent px-3 py-2 text-sm outline-none focus:border-primary dark:border-border-dark" />
-          <input required placeholder="Title (EN)" value={form.title_en}
-            onChange={(e) => setForm({ ...form, title_en: e.target.value })}
-            className="rounded-md border border-border-light bg-transparent px-3 py-2 text-sm outline-none focus:border-primary dark:border-border-dark" />
-          <textarea placeholder="Description (FR)" rows={2} value={form.description_fr}
-            onChange={(e) => setForm({ ...form, description_fr: e.target.value })}
-            className="rounded-md border border-border-light bg-transparent px-3 py-2 text-sm outline-none focus:border-primary dark:border-border-dark" />
-          <textarea placeholder="Description (EN)" rows={2} value={form.description_en}
-            onChange={(e) => setForm({ ...form, description_en: e.target.value })}
-            className="rounded-md border border-border-light bg-transparent px-3 py-2 text-sm outline-none focus:border-primary dark:border-border-dark" />
-          <input placeholder="URL image" value={form.cover_image}
-            onChange={(e) => setForm({ ...form, cover_image: e.target.value })}
-            className="rounded-md border border-border-light bg-transparent px-3 py-2 text-sm outline-none focus:border-primary dark:border-border-dark" />
-          <input placeholder="Tags (separes par une virgule)" value={form.tags}
-            onChange={(e) => setForm({ ...form, tags: e.target.value })}
-            className="rounded-md border border-border-light bg-transparent px-3 py-2 text-sm outline-none focus:border-primary dark:border-border-dark" />
-          <input placeholder="URL demo" value={form.demo_url}
-            onChange={(e) => setForm({ ...form, demo_url: e.target.value })}
-            className="rounded-md border border-border-light bg-transparent px-3 py-2 text-sm outline-none focus:border-primary dark:border-border-dark" />
-          <input placeholder="URL depot" value={form.repo_url}
-            onChange={(e) => setForm({ ...form, repo_url: e.target.value })}
-            className="rounded-md border border-border-light bg-transparent px-3 py-2 text-sm outline-none focus:border-primary dark:border-border-dark" />
-          <label className="flex items-center gap-2 text-sm">
-            <input type="checkbox" checked={form.published} onChange={(e) => setForm({ ...form, published: e.target.checked })} />
-            Publie
+        <form onSubmit={handleCreate} style={{ background: 'var(--c-bg2)', border: '1px solid var(--c-border)', borderRadius: 14, padding: '1.5rem', display: 'flex', flexDirection: 'column', gap: '0.875rem' }}>
+          <h3 style={{ fontFamily: 'var(--ff-display)', fontSize: '0.95rem', fontWeight: 700, color: 'var(--c-ink)', marginBottom: 4 }}>Nouveau projet</h3>
+
+          <ImageUpload label="Image de couverture" value={form.cover_image} onChange={(url) => setForm({ ...form, cover_image: url })} aspectRatio="wide" />
+
+          {[
+            { ph: 'slug (ex: mon-projet)', field: 'slug' as const, req: true },
+            { ph: 'Titre (FR)', field: 'title_fr' as const, req: true },
+            { ph: 'Title (EN)', field: 'title_en' as const, req: true },
+          ].map(({ ph, field, req }) => (
+            <div key={field}>
+              <input required={req} placeholder={ph} value={(form as any)[field]}
+                onChange={(e) => setForm({ ...form, [field]: e.target.value })} style={inp}
+                onFocus={(e) => (e.currentTarget.style.borderColor = 'var(--c-blue)')}
+                onBlur={(e) => (e.currentTarget.style.borderColor = 'var(--c-border)')} />
+            </div>
+          ))}
+          {[
+            { ph: 'Description (FR)', field: 'description_fr' as const },
+            { ph: 'Description (EN)', field: 'description_en' as const },
+          ].map(({ ph, field }) => (
+            <textarea key={field} placeholder={ph} rows={2} value={(form as any)[field]}
+              onChange={(e) => setForm({ ...form, [field]: e.target.value })} style={{ ...inp, resize: 'vertical' as const }}
+              onFocus={(e) => (e.currentTarget.style.borderColor = 'var(--c-blue)')}
+              onBlur={(e) => (e.currentTarget.style.borderColor = 'var(--c-border)')} />
+          ))}
+          <input placeholder="Tags (séparés par virgule)" value={form.tags}
+            onChange={(e) => setForm({ ...form, tags: e.target.value })} style={inp}
+            onFocus={(e) => (e.currentTarget.style.borderColor = 'var(--c-blue)')}
+            onBlur={(e) => (e.currentTarget.style.borderColor = 'var(--c-border)')} />
+          <input placeholder="URL démo" value={form.demo_url}
+            onChange={(e) => setForm({ ...form, demo_url: e.target.value })} style={inp}
+            onFocus={(e) => (e.currentTarget.style.borderColor = 'var(--c-blue)')}
+            onBlur={(e) => (e.currentTarget.style.borderColor = 'var(--c-border)')} />
+          <input placeholder="URL dépôt" value={form.repo_url}
+            onChange={(e) => setForm({ ...form, repo_url: e.target.value })} style={inp}
+            onFocus={(e) => (e.currentTarget.style.borderColor = 'var(--c-blue)')}
+            onBlur={(e) => (e.currentTarget.style.borderColor = 'var(--c-border)')} />
+          <label style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: '0.83rem', cursor: 'pointer', color: 'var(--c-ink)' }}>
+            <input type="checkbox" checked={form.published} onChange={(e) => setForm({ ...form, published: e.target.checked })} style={{ accentColor: 'var(--c-blue)', width: 14, height: 14 }} />
+            Publier
           </label>
-          <button type="submit" disabled={loading}
-            className="mt-1 flex items-center justify-center gap-2 rounded-md bg-primary px-4 py-2 text-sm font-medium text-white hover:opacity-90 disabled:opacity-50">
-            <Plus size={16} strokeWidth={1.75} /> Ajouter
+          <button type="submit" disabled={loading} className="btn-primary" style={{ justifyContent: 'center', opacity: loading ? 0.6 : 1 }}>
+            <Plus size={15} /> Ajouter
           </button>
         </form>
       </div>

@@ -1,0 +1,23 @@
+/* ════════════════════════════════════════
+   Styles Backoffice — complète globals.css
+   Variables CSS pour les tokens admin
+════════════════════════════════════════ */
+
+/* Réutilise les mêmes variables que le portfolio public */
+:root {
+  --admin-bg:     #f6f8fa;
+  --admin-surface: #ffffff;
+  --admin-border:  #d0d7de;
+  --admin-ink:     #1c2128;
+  --admin-muted:   #57606a;
+  --admin-primary: #0550ae;
+}
+
+.dark {
+  --admin-bg:      #0d1117;
+  --admin-surface: #161b22;
+  --admin-border:  #30363d;
+  --admin-ink:     #e6edf3;
+  --admin-muted:   #8b949e;
+  --admin-primary: #1f6feb;
+}

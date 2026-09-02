@@ -26,7 +26,7 @@ export function ContactSection() {
           <p style={{ fontSize: '0.9rem', color: 'var(--c-muted)' }}>Un projet, une opportunité, une question ? Écrivez-moi, je réponds rapidement.</p>
         </div>
 
-        <div className="reveal" style={{ display: 'grid', gridTemplateColumns: 'minmax(0,1fr) minmax(0,1.4fr)', gap: '3rem', alignItems: 'start' }}>
+        <div className="reveal contact-grid">
           {/* Info cards */}
           <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
             {/* Contact details */}
@@ -69,7 +69,7 @@ export function ContactSection() {
           <form onSubmit={submit} style={{ background: 'var(--c-bg2)', border: '1px solid var(--c-border)', borderRadius: 14, padding: '2rem', display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
             <h3 style={{ fontFamily: 'var(--ff-display)', fontSize: '0.95rem', fontWeight: 700, color: 'var(--c-ink)' }}>Envoyer un message</h3>
 
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+            <div className="contact-form-row">
               <div>
                 <label style={{ display: 'block', fontSize: '0.68rem', fontWeight: 700, textTransform: 'uppercase' as const, letterSpacing: '0.1em', color: 'var(--c-muted)', marginBottom: 6 }}>Nom complet</label>
                 <input name="full_name" required maxLength={100} className="inp" placeholder="Votre nom" />

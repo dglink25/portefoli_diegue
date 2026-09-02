@@ -26,7 +26,7 @@ export function ExpertisesSection() {
           <div className="sec-divider" />
         </div>
 
-        <div className="reveal" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '1.25rem' }}>
+        <div className="reveal expertises-grid">
           {EXPERTISES.map(({ icon: Icon, title, desc }, idx) => (
             <div
               key={title}

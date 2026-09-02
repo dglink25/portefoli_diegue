@@ -1,20 +1,68 @@
 services:
+
+  # ── Base de données PostgreSQL ────────────────────────
   db:
     image: postgres:16-alpine
     restart: unless-stopped
     environment:
-      POSTGRES_USER: ${POSTGRES_USER:-portfolio}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-portfolio}
-      POSTGRES_DB: ${POSTGRES_DB:-portfolio}
+      POSTGRES_USER:     ${POSTGRES_USER:-portfolio}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-change-me}
+      POSTGRES_DB:       ${POSTGRES_DB:-portfolio}
     ports:
-      - "${POSTGRES_PORT:-5432}:5432"
+      - "${POSTGRES_PORT:-5437}:5432"
     volumes:
       - db_data_dev:/var/lib/postgresql/data
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-portfolio}"]
       interval: 5s
       timeout: 5s
-      retries: 10
+      retries: 15
+
+  # ── Migrations + Seed (s'exécute une fois au démarrage) ──
+  setup:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    command: >
+      sh -c "
+        echo '>>> Attente de la base de données...' &&
+        npx node-pg-migrate up &&
+        echo '>>> Migrations appliquées.' &&
+        npx tsx scripts/seed.ts &&
+        echo '>>> Compte admin créé.'
+      "
+    env_file: .env
+    environment:
+      DATABASE_URL: postgres://${POSTGRES_USER:-portfolio}:${POSTGRES_PASSWORD:-change-me}@db:5432/${POSTGRES_DB:-portfolio}
+    depends_on:
+      db:
+        condition: service_healthy
+    restart: on-failure
+
+  # ── Application Next.js (dev avec hot-reload) ─────────
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      DATABASE_URL: postgres://${POSTGRES_USER:-portfolio}:${POSTGRES_PASSWORD:-change-me}@db:5432/${POSTGRES_DB:-portfolio}
+      NEXTAUTH_URL: http://localhost:3000
+      NODE_ENV:     development
+    ports:
+      - "3000:3000"
+    volumes:
+      # Mount du code source pour le hot-reload
+      - .:/app
+      # Préserver node_modules et .next du container
+      - /app/node_modules
+      - /app/.next
+    depends_on:
+      setup:
+        condition: service_completed_successfully
+      db:
+        condition: service_healthy
 
 volumes:
   db_data_dev:

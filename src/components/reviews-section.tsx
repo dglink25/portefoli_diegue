@@ -51,7 +51,7 @@ export function ReviewsSection({ reviews, locale }: { reviews: Review[]; locale:
           </div>
         )}
 
-        <div className="reveal" style={{ display: 'grid', gridTemplateColumns: 'minmax(0,1fr) minmax(0,380px)', gap: '2rem', alignItems: 'start' }}>
+        <div className="reveal reviews-grid">
 
           {/* List */}
           <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>

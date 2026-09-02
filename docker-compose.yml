@@ -1,11 +1,13 @@
 services:
+
+  # ── Base de données PostgreSQL ────────────────────────
   db:
     image: postgres:16-alpine
     restart: unless-stopped
     environment:
-      POSTGRES_USER: ${POSTGRES_USER:-portfolio}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-portfolio}
-      POSTGRES_DB: ${POSTGRES_DB:-portfolio}
+      POSTGRES_USER:     ${POSTGRES_USER:-portfolio}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-change-me}
+      POSTGRES_DB:       ${POSTGRES_DB:-portfolio}
     ports:
       - "${POSTGRES_PORT:-5432}:5432"
     volumes:
@@ -14,20 +16,30 @@ services:
       test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-portfolio}"]
       interval: 5s
       timeout: 5s
-      retries: 10
+      retries: 15
 
-  migrate:
+  # ── Migrations + Seed ─────────────────────────────────
+  setup:
     build:
       context: .
-      target: deps
-    command: sh -c "npm run migrate:up"
+      target: deps-runner
+    command: >
+      sh -c "
+        echo '>>> Migrations...' &&
+        npx node-pg-migrate up &&
+        echo '>>> Seed...' &&
+        npx tsx scripts/seed.ts &&
+        echo '>>> Setup terminé.'
+      "
     env_file: .env
     environment:
-      DATABASE_URL: postgres://${POSTGRES_USER:-portfolio}:${POSTGRES_PASSWORD:-portfolio}@db:5432/${POSTGRES_DB:-portfolio}
+      DATABASE_URL: postgres://${POSTGRES_USER:-portfolio}:${POSTGRES_PASSWORD:-change-me}@db:5432/${POSTGRES_DB:-portfolio}
     depends_on:
       db:
         condition: service_healthy
+    restart: on-failure
 
+  # ── Application Next.js (production) ─────────────────
   app:
     build:
       context: .
@@ -35,11 +47,14 @@ services:
     restart: unless-stopped
     env_file: .env
     environment:
-      DATABASE_URL: postgres://${POSTGRES_USER:-portfolio}:${POSTGRES_PASSWORD:-portfolio}@db:5432/${POSTGRES_DB:-portfolio}
-      NODE_ENV: production
+      DATABASE_URL: postgres://${POSTGRES_USER:-portfolio}:${POSTGRES_PASSWORD:-change-me}@db:5432/${POSTGRES_DB:-portfolio}
+      NEXTAUTH_URL: http://localhost:3000
+      NODE_ENV:     production
     ports:
       - "${APP_PORT:-3000}:3000"
     depends_on:
+      setup:
+        condition: service_completed_successfully
       db:
         condition: service_healthy
 

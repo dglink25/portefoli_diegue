@@ -66,8 +66,8 @@ export function PortfolioLayout({ profile, skills, projects, experiences, review
 
       {/* Main content */}
       <main className="flex-1 lg:ml-72">
-        <HeroSection profile={profile} />
-        <AboutSection profile={profile} />
+        <HeroSection profile={profile} locale={locale} />
+        <AboutSection profile={profile} locale={locale} />
         <SkillsSection skills={skills} />
         <ProjectsSection projects={projects} locale={locale} />
         <ExperienceSection experiences={experiences} locale={locale} />

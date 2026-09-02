@@ -53,8 +53,8 @@ export function PortfolioPage({ profile, skills, projects, experiences, reviews,
   return (
     <>
       <NavBar profile={profile} active={active} locale={locale} />
-      <HeroSection profile={profile} />
-      <AboutSection profile={profile} />
+      <HeroSection profile={profile} locale={locale} />
+      <AboutSection profile={profile} locale={locale} />
       <ExpertisesSection />
       <SkillsSection skills={skills} />
       <ExperienceSection experiences={experiences} locale={locale} />
