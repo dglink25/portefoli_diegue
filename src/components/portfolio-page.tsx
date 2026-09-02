@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import type { Profile, Skill, Project, Experience, Review } from '@/types';
+import type { Stat } from '@/app/[locale]/page';
 import { NavBar } from './nav-bar';
 import { HeroSection } from './hero-section';
 import { AboutSection } from './about-section';
@@ -25,10 +26,11 @@ interface Props {
   experiences: Experience[];
   reviews: Review[];
   gallery: GalleryItem[];
+  stats: Stat[];
   locale: string;
 }
 
-export function PortfolioPage({ profile, skills, projects, experiences, reviews, gallery, locale }: Props) {
+export function PortfolioPage({ profile, skills, projects, experiences, reviews, gallery, stats, locale }: Props) {
   const [active, setActive] = useState('hero');
 
   useEffect(() => {
@@ -53,8 +55,8 @@ export function PortfolioPage({ profile, skills, projects, experiences, reviews,
   return (
     <>
       <NavBar profile={profile} active={active} locale={locale} />
-      <HeroSection profile={profile} locale={locale} />
-      <AboutSection profile={profile} locale={locale} />
+      <HeroSection profile={profile} locale={locale} stats={stats} />
+      <AboutSection profile={profile} locale={locale} stats={stats} />
       <ExpertisesSection />
       <SkillsSection skills={skills} />
       <ExperienceSection experiences={experiences} locale={locale} />

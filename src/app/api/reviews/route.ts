@@ -1,30 +1,40 @@
 import { NextResponse } from 'next/server';
 import { query } from '@/lib/db';
-import { reviewSchema } from '@/lib/validators';
+import { z } from 'zod';
 
-// GET /api/reviews -> avis publies (utilise par le site public)
+const postSchema = z.object({
+  full_name: z.string().trim().min(2).max(100),
+  message:   z.string().trim().min(3).max(600),
+  // rating optionnel à la soumission (on peut laisser sans note initiale)
+  rating:    z.number().int().min(1).max(5).optional().default(5),
+});
+
 export async function GET() {
-  const reviews = await query(
-    'SELECT id, full_name, message, rating, created_at FROM reviews WHERE published = true ORDER BY created_at DESC'
-  );
+  // Récupère les avis avec le total de notes et la moyenne des notes tierces
+  const reviews = await query(`
+    SELECT
+      r.id, r.full_name, r.message, r.rating, r.created_at,
+      COALESCE(AVG(rr.rating), NULL)::float  AS peer_avg,
+      COUNT(rr.id)::int                       AS peer_count
+    FROM reviews r
+    LEFT JOIN review_ratings rr ON rr.review_id = r.id
+    WHERE r.published = true
+    GROUP BY r.id
+    ORDER BY r.created_at DESC
+  `);
   return NextResponse.json({ reviews });
 }
 
-// POST /api/reviews -> un visiteur soumet un avis. Il reste invisible
-// (published = false) jusqu'a validation par l'admin dans le backoffice,
-// afin d'eviter le spam.
 export async function POST(req: Request) {
   const body = await req.json().catch(() => null);
-  const parsed = reviewSchema.safeParse(body);
-  if (!parsed.success) {
+  const parsed = postSchema.safeParse(body);
+  if (!parsed.success)
     return NextResponse.json({ error: 'invalid_payload' }, { status: 400 });
-  }
 
   const { full_name, message, rating } = parsed.data;
   await query(
-    'INSERT INTO reviews (full_name, message, rating, published) VALUES ($1, $2, $3, false)',
+    'INSERT INTO reviews (full_name, message, rating, published) VALUES ($1, $2, $3, true)',
     [full_name, message, rating]
   );
-
   return NextResponse.json({ ok: true }, { status: 201 });
 }

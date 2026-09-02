@@ -54,15 +54,15 @@ export function SidebarNav({ profile, activeSection, locale }: {
   const router   = useRouter();
   const pathname = usePathname();
 
-  /** Même logique que NavBar — rechargement complet pour Server Component */
+  /** Fix définitif — window.location.pathname = vraie URL navigateur, non altérée par next-intl */
   const switchLocale = (next: string) => {
     if (next === locale) return;
-    const segs = pathname.split('/').filter(Boolean);
-    const hasPrefix = segs[0] === 'en' || segs[0] === 'fr';
-    const rest = hasPrefix ? segs.slice(1) : segs;
-    const restPath = rest.length > 0 ? '/' + rest.join('/') : '/';
-    const target = next === 'fr' ? restPath : `/en${restPath === '/' ? '' : restPath}`;
-    window.location.href = target || '/';
+    const real = window.location.pathname;
+    const withoutPrefix = real.replace(/^\/(en|fr)(\/|$)/, '/') || '/';
+    const target = next === 'fr'
+      ? (withoutPrefix || '/')
+      : `/en${withoutPrefix === '/' ? '' : withoutPrefix}`;
+    window.location.href = target;
   };
 
   const NavContent = () => (

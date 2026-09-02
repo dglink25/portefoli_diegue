@@ -3,12 +3,13 @@
 import { useEffect, useState } from 'react';
 import { Mail, Phone, MapPin, Briefcase, ChevronDown } from 'lucide-react';
 import type { Profile } from '@/types';
+import type { Stat } from '@/app/[locale]/page';
 import { HeroScene } from './hero-scene';
 
 const ROLES_FR = ['Développeur Full-Stack', 'Passionné IA & IoT', 'Tech Entrepreneur', 'Créateur de solutions'];
 const ROLES_EN = ['Full-Stack Developer', 'AI & IoT Enthusiast', 'Tech Entrepreneur', 'Solution Creator'];
 
-export function HeroSection({ profile, locale }: { profile: Profile | null; locale: string }) {
+export function HeroSection({ profile, locale, stats }: { profile: Profile | null; locale: string; stats: Stat[] }) {
   const ROLES = locale === 'en' ? ROLES_EN : ROLES_FR;
   const [roleIdx, setRoleIdx] = useState(0);
   const [typed, setTyped]     = useState('');
@@ -29,10 +30,6 @@ export function HeroSection({ profile, locale }: { profile: Profile | null; loca
   const bio   = locale === 'en'
     ? (profile?.bio_en || 'Graduate in Electrical Engineering and Computer Science from INSTI-Lokossa. Passionate about AI and IoT, I design modern web/mobile applications and innovative solutions.')
     : (profile?.bio_fr || 'Diplômé en Génie Électrique et Informatique à l\'INSTI-Lokossa. Passionné par l\'IA et l\'IoT, je conçois des applications web/mobiles modernes et des solutions innovantes.');
-
-  const STATS = locale === 'en'
-    ? [{ v:'3+', l:"Years' experience" }, { v:'10+', l:'Projects delivered' }, { v:'15+', l:'Technologies' }, { v:'2', l:'Organisations' }]
-    : [{ v:'3+', l:"Années d'expérience" }, { v:'10+', l:'Projets livrés' }, { v:'15+', l:'Technologies' }, { v:'2', l:'Organisations' }];
 
   return (
     <section id="hero" style={{ position: 'relative', minHeight: '100vh', display: 'flex', alignItems: 'center', paddingTop: 64, overflow: 'hidden', background: 'var(--c-bg)' }}>
@@ -97,12 +94,16 @@ export function HeroSection({ profile, locale }: { profile: Profile | null; loca
             ))}
           </div>
 
-          {/* Stats — responsive class */}
+          {/* Stats dynamiques depuis DB */}
           <div className="anim-fade-up-6 hero-stats">
-            {STATS.map((s) => (
-              <div key={s.l} style={{ textAlign: 'center' }}>
-                <p style={{ fontFamily: 'var(--ff-display)', fontSize: 'clamp(1.3rem, 2.5vw, 1.9rem)', fontWeight: 700, color: 'var(--c-blue)', lineHeight: 1 }}>{s.v}</p>
-                <p style={{ fontSize: '0.65rem', color: 'var(--c-muted)', marginTop: 4, maxWidth: 80 }}>{s.l}</p>
+            {stats.map((s) => (
+              <div key={s.label_fr} style={{ textAlign: 'center' }}>
+                <p style={{ fontFamily: 'var(--ff-display)', fontSize: 'clamp(1.3rem,2.5vw,1.9rem)', fontWeight: 700, color: 'var(--c-blue)', lineHeight: 1 }}>
+                  {s.value}{s.suffix}
+                </p>
+                <p style={{ fontSize: '.65rem', color: 'var(--c-muted)', marginTop: 4, maxWidth: 80 }}>
+                  {locale === 'en' ? s.label_en : s.label_fr}
+                </p>
               </div>
             ))}
           </div>

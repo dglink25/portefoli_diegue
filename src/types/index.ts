@@ -57,6 +57,8 @@ export interface Review {
   rating: number;
   published: boolean;
   created_at: string;
+  peer_avg: number | null;
+  peer_count: number;
 }
 
 export interface Message {

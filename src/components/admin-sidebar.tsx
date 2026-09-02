@@ -12,13 +12,13 @@ import {
 
 const ITEMS = [
   { href:'/admin/dashboard',  label:'Tableau de bord', icon:LayoutDashboard },
+  { href:'/admin/profile',    label:'Profil',          icon:User },
   { href:'/admin/projects',   label:'Projets',         icon:FolderKanban },
   { href:'/admin/skills',     label:'Compétences',     icon:Sparkles },
   { href:'/admin/experiences',label:'Parcours',        icon:Briefcase },
   { href:'/admin/gallery',    label:'Galerie',         icon:Images },
   { href:'/admin/reviews',    label:'Avis',            icon:Star },
-  { href:'/admin/profile',    label:'Profil',          icon:User },
-  { href:'/admin/settings',   label:'Paramètres',      icon:Settings },
+  { href:'/admin/settings',   label:'Statistiques',    icon:Settings },
 ];
 
 function ThemeBtn() {

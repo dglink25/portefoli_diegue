@@ -68,14 +68,17 @@ export function NavBar({ profile, active, locale }: { profile: Profile | null; a
 
   const switchLocale = (next: string) => {
     if (next === locale) return;
-    // Force un rechargement complet pour que le Server Component reçoive le nouveau locale
-    // next-intl avec localePrefix:'as-needed' : FR=/, EN=/en
-    const segs = pathname.split('/').filter(Boolean); // ['en'] ou []
-    const hasPrefix = segs[0] === 'en' || segs[0] === 'fr';
-    const rest = hasPrefix ? segs.slice(1) : segs;
-    const restPath = rest.length > 0 ? '/' + rest.join('/') : '/';
-    const target = next === 'fr' ? restPath : `/en${restPath === '/' ? '' : restPath}`;
-    window.location.href = target || '/';
+    
+    // Récupère le chemin réel sans le préfixe de locale
+    const real = window.location.pathname;
+    const withoutPrefix = real.replace(/^\/(en|fr)(\/|$)/, '/') || '/';
+    
+    // CORRECTION : Construit correctement l'URL selon la locale cible
+    const target = next === 'fr'
+      ? `/fr${withoutPrefix === '/' ? '' : withoutPrefix}`
+      : `/en${withoutPrefix === '/' ? '' : withoutPrefix}`;
+    
+    window.location.href = target;
   };
 
   const initials = profile
