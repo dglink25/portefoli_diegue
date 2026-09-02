@@ -43,7 +43,7 @@ export default function GalleryAdminPage() {
       body: JSON.stringify({ ...form, order_index: Number(form.order_index) }),
     });
     setSaving(false);
-    if (res.ok) { setMsg('Photo ajoutée ✓'); setForm({ ...EMPTY }); load(); }
+    if (res.ok) { setMsg('Photo ajoutée avec succès'); setForm({ ...EMPTY }); load(); }
     else setMsg('Erreur lors de l\'ajout');
   }
 
@@ -108,7 +108,7 @@ export default function GalleryAdminPage() {
               Publier immédiatement
             </label>
             <div className="flex items-center gap-3">
-              {msg && <p className={`text-sm ${msg.includes('✓') ? 'text-green-600' : 'text-red-600'}`}>{msg}</p>}
+              {msg && <p className={`text-sm ${msg.includes('succès') ? 'text-green-600' : 'text-red-600'}`}>{msg}</p>}
               <button type="submit" disabled={saving}
                 className="flex items-center gap-2 rounded-xl bg-primary px-5 py-2.5 text-sm font-semibold text-white shadow-md shadow-primary/30 transition-all hover:opacity-90 disabled:opacity-50">
                 <Plus size={16} /> Ajouter

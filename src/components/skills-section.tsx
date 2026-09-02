@@ -80,7 +80,7 @@ export function SkillsSection({ skills }: { skills: Skill[] }) {
                         <div key={skill.id} className="skill-chip">
                           {iconUrl
                             ? <img src={iconUrl} alt={skill.name} onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }} />
-                            : <span style={{ fontSize: '1.5rem' }}>⭐</span>
+                            : <Code2 size={20} style={{ color: 'var(--c-blue)' }} />
                           }
                           {skill.name}
                         </div>
@@ -102,7 +102,7 @@ export function SkillsSection({ skills }: { skills: Skill[] }) {
                         <div key={name} className="skill-chip">
                           {iconUrl
                             ? <img src={iconUrl} alt={name} onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }} />
-                            : <span style={{ fontSize: '1.5rem' }}>⭐</span>
+                            : <Code2 size={20} style={{ color: 'var(--c-blue)' }} />
                           }
                           {name}
                         </div>

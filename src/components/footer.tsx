@@ -24,8 +24,8 @@ export function Footer() {
             <p className="font-display text-xl font-bold">
               <span className="text-primary">D</span>iègue
             </p>
-            <p className="max-w-[22ch] text-sm text-muted-light dark:text-muted-dark">
-              Développeur Full-Stack & IA · Bénin 🇧🇯
+            <p className="max-w-[22ch] text-sm" style={{ color: 'var(--c-muted)' }}>
+              Développeur Full-Stack &amp; IA · Bénin
             </p>
             <div className="flex gap-3 mt-1">
               <a href="https://github.com" target="_blank" rel="noreferrer"
