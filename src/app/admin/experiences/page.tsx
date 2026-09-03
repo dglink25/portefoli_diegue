@@ -181,7 +181,12 @@ export default function ExperiencesAdminPage() {
                     <span style={{fontSize:'.7rem',padding:'1px 7px',borderRadius:20,background:'rgba(9,105,218,.08)',color:'var(--c-blue)',fontWeight:500}}>
                       {fmtDate(exp.start_date)} → {exp.end_date ? fmtDate(exp.end_date) : "Aujourd'hui"}
                     </span>
-                    {exp.location && <span style={{fontSize:'.7rem',color:'var(--c-muted)'}}>📍 {exp.location}</span>}
+                    {exp.location && (
+                      <span style={{display:'flex',alignItems:'center',gap:3,fontSize:'.7rem',color:'var(--c-muted)'}}>
+                        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20 10c0 5-8 13-8 13S4 15 4 10a8 8 0 0116 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                        {exp.location}
+                      </span>
+                    )}
                   </div>
                   {exp.description_fr && (
                     <p style={{fontSize:'.76rem',color:'var(--c-muted)',marginTop:5,display:'-webkit-box',WebkitLineClamp:2,WebkitBoxOrient:'vertical',overflow:'hidden'}}>

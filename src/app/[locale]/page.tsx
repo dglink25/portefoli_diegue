@@ -1,5 +1,6 @@
 import { query, queryOne } from '@/lib/db';
 import { PortfolioPage } from '@/components/portfolio-page';
+import { unstable_setRequestLocale } from 'next-intl/server';
 import type { Profile, Skill, Project, Experience, Review } from '@/types';
 
 interface GalleryItem {
@@ -15,6 +16,8 @@ export interface Stat {
 }
 
 export default async function HomePage({ params }: { params: { locale: string } }) {
+  // Active le rendu statique pour next-intl
+  unstable_setRequestLocale(params.locale);
   const [profile, skills, projects, experiences, reviews, gallery, statsRow] = await Promise.all([
     queryOne<Profile>('SELECT * FROM profile WHERE id = 1'),
     query<Skill>('SELECT * FROM skills WHERE category != $1 ORDER BY order_index ASC, id ASC', ['general']),

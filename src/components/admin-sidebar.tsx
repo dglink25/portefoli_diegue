@@ -7,7 +7,7 @@ import { useTheme } from 'next-themes';
 import { useEffect, useState } from 'react';
 import {
   LayoutDashboard, FolderKanban, Sparkles, Briefcase,
-  Star, User, Settings, LogOut, Images, Sun, Moon,
+  Star, User, Settings, LogOut, Images, Inbox, Sun, Moon,
 } from 'lucide-react';
 
 const ITEMS = [
@@ -18,6 +18,7 @@ const ITEMS = [
   { href:'/admin/experiences',label:'Parcours',        icon:Briefcase },
   { href:'/admin/gallery',    label:'Galerie',         icon:Images },
   { href:'/admin/reviews',    label:'Avis',            icon:Star },
+  { href:'/admin/messages',   label:'Messages',        icon:Inbox },
   { href:'/admin/settings',   label:'Statistiques',    icon:Settings },
 ];
 
