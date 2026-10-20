@@ -46,7 +46,7 @@ function StarPicker({ value, onChange, size = 30 }: { value:number; onChange:(v:
         ))}
       </div>
       <p style={{ fontSize:'.75rem', color:'var(--c-blue)', fontWeight:600, minHeight:'1rem' }}>
-        {(hover||value) > 0 ? `${hover||value}/5 — ${labels[hover||value]}` : ''}
+        {(hover||value) > 0 ? `${hover||value}/5 - ${labels[hover||value]}` : ''}
       </p>
     </div>
   );
@@ -392,7 +392,7 @@ export function ReviewsSection({ reviews: _initial, locale }: { reviews: Review[
                     {/* Footer */}
                     <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', flexWrap:'wrap', gap:8, paddingTop:'.75rem', borderTop:'1px solid var(--c-border)' }}>
 
-                      {/* Votes communautaires — cliquable */}
+                      {/* Votes communautaires - cliquable */}
                       <button
                         onClick={() => setVoterReview(r)}
                         style={{ display:'flex', alignItems:'center', gap:6, background:'none', border:'none', cursor: r.peer_count>0?'pointer':'default', padding:0, fontFamily:'var(--ff-body)', transition:'opacity .2s' }}

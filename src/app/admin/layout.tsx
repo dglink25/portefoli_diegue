@@ -3,7 +3,7 @@ import { AuthSessionProvider } from '@/components/session-provider';
 import '../globals.css';
 
 export const metadata = {
-  title: 'Backoffice — Portfolio'
+  title: 'Backoffice - Portfolio'
 };
 
 export default function AdminRootLayout({ children }: { children: React.ReactNode }) {

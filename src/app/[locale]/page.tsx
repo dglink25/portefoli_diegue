@@ -8,6 +8,7 @@ interface GalleryItem {
   image_url: string; category: string; order_index: number;
 }
 
+export const dynamic = 'force-dynamic';
 export interface Stat {
   value: number;
   suffix: string;

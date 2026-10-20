@@ -194,7 +194,7 @@ export default function ProjectsAdminPage() {
         {/* ── Liste ── */}
         <div style={{ display:'flex', flexDirection:'column', gap:'.75rem' }}>
           <p style={{ fontSize:'.8rem', color:'var(--c-muted)', marginBottom:4 }}>
-            {projects.length} projet(s) — <Pencil size={12} style={{ display:'inline', verticalAlign:'middle' }}/> modifier / <EyeOff size={12} style={{ display:'inline', verticalAlign:'middle' }}/> masquer
+            {projects.length} projet(s) - <Pencil size={12} style={{ display:'inline', verticalAlign:'middle' }}/> modifier / <EyeOff size={12} style={{ display:'inline', verticalAlign:'middle' }}/> masquer
           </p>
 
           {projects.length === 0 && <p style={{ fontSize:'.85rem', color:'var(--c-muted)' }}>Aucun projet.</p>}

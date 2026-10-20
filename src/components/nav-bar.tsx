@@ -1,62 +1,57 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useRouter, usePathname } from 'next/navigation';
 import { Menu, X, Sun, Moon } from 'lucide-react';
 import { useTheme } from 'next-themes';
-import { locales } from '@/i18n/config';
 import type { Profile } from '@/types';
 
 function getLinks(locale: string) {
   return locale === 'en'
     ? [
-        { id:'about',      label:'About' },
-        { id:'expertises', label:'Expertise' },
-        { id:'skills',     label:'Skills' },
-        { id:'experience', label:'Experience' },
-        { id:'projects',   label:'Projects' },
-        { id:'gallery',    label:'Gallery' },
-        { id:'reviews',    label:'Reviews' },
-        { id:'contact',    label:'Contact' },
+        { id: 'about', label: 'About' },
+        { id: 'expertises', label: 'Expertise' },
+        { id: 'skills', label: 'Skills' },
+        { id: 'experience', label: 'Experience' },
+        { id: 'projects', label: 'Projects' },
+        { id: 'gallery', label: 'Gallery' },
+        { id: 'reviews', label: 'Reviews' },
+        { id: 'contact', label: 'Contact' },
       ]
     : [
-        { id:'about',      label:'À propos' },
-        { id:'expertises', label:'Expertises' },
-        { id:'skills',     label:'Compétences' },
-        { id:'experience', label:'Expériences' },
-        { id:'projects',   label:'Projets' },
-        { id:'gallery',    label:'Galerie' },
-        { id:'reviews',    label:'Avis' },
-        { id:'contact',    label:'Contact' },
+        { id: 'about', label: 'À propos' },
+        { id: 'expertises', label: 'Expertises' },
+        { id: 'skills', label: 'Compétences' },
+        { id: 'experience', label: 'Expériences' },
+        { id: 'projects', label: 'Projets' },
+        { id: 'gallery', label: 'Galerie' },
+        { id: 'reviews', label: 'Avis' },
+        { id: 'contact', label: 'Contact' },
       ];
 }
 
-function ThemeBtn() {
+function ThemeBtn({ locale }: { locale: string }) {
   const { resolvedTheme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
   useEffect(() => setMounted(true), []);
-  if (!mounted) return <div style={{ width:36, height:36 }} />;
+  if (!mounted) return <div style={{ width: '2.75rem', height: '2.75rem' }} />;
   const dark = resolvedTheme === 'dark';
+  const label =
+    locale === 'en' ? (dark ? 'Light theme' : 'Dark theme') : dark ? 'Thème clair' : 'Thème sombre';
   return (
-    <button onClick={() => setTheme(dark ? 'light' : 'dark')}
-      aria-label={dark ? 'Thème clair' : 'Thème sombre'}
-      style={{ width:36, height:36, borderRadius:8, border:'1px solid var(--c-border)', background:'transparent', cursor:'pointer', display:'flex', alignItems:'center', justifyContent:'center', color:'var(--c-muted)', transition:'all .2s', flexShrink:0 }}
-      onMouseEnter={(e)=>{ e.currentTarget.style.borderColor='var(--c-blue)'; e.currentTarget.style.color='var(--c-blue)'; }}
-      onMouseLeave={(e)=>{ e.currentTarget.style.borderColor='var(--c-border)'; e.currentTarget.style.color='var(--c-muted)'; }}>
-      {dark ? <Sun size={16}/> : <Moon size={16}/>}
+    <button type="button" className="icon-btn" aria-label={label} title={label} onClick={() => setTheme(dark ? 'light' : 'dark')}>
+      {dark ? <Sun size={22} /> : <Moon size={22} />}
     </button>
   );
 }
 
 export function NavBar({ profile, active, locale }: { profile: Profile | null; active: string; locale: string }) {
-  const [scrolled,    setScrolled]    = useState(false);
-  const [mobileOpen,  setMobileOpen]  = useState(false);
-  const router   = useRouter();
-  const pathname = usePathname();
-  const LINKS    = getLinks(locale);
+  const [scrolled, setScrolled] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const LINKS = getLinks(locale);
 
   useEffect(() => {
-    const h = () => setScrolled(window.scrollY > 30);
+    const h = () => setScrolled(window.scrollY > 10);
+    h();
     window.addEventListener('scroll', h, { passive: true });
     return () => window.removeEventListener('scroll', h);
   }, []);
@@ -68,76 +63,87 @@ export function NavBar({ profile, active, locale }: { profile: Profile | null; a
 
   const switchLocale = (next: string) => {
     if (next === locale) return;
-    
-    // Récupère le chemin réel sans le préfixe de locale
     const real = window.location.pathname;
     const withoutPrefix = real.replace(/^\/(en|fr)(\/|$)/, '/') || '/';
-    
-    // CORRECTION : Construit correctement l'URL selon la locale cible
-    const target = next === 'fr'
-      ? `/fr${withoutPrefix === '/' ? '' : withoutPrefix}`
-      : `/en${withoutPrefix === '/' ? '' : withoutPrefix}`;
-    
-    window.location.href = target;
+    window.location.href = `/${next}${withoutPrefix === '/' ? '' : withoutPrefix}`;
   };
 
   const initials = profile
-    ? profile.full_name.split(' ').slice(0,2).map((w)=>w[0]).join('').toUpperCase()
+    ? profile.full_name.split(' ').slice(0, 2).map((w) => w[0]).join('').toUpperCase()
     : 'DH';
 
   return (
     <>
-      <header style={{ position:'fixed', top:0, left:0, right:0, zIndex:100 }}
-        className={scrolled ? 'navbar-scrolled' : ''}>
-        <div style={{ maxWidth:1200, margin:'0 auto', padding:'0 1.25rem', display:'flex', alignItems:'center', justifyContent:'space-between', height:64, gap:12 }}>
-
-          {/* Logo */}
-          <button onClick={()=>scrollTo('hero')}
-            style={{ width:40, height:40, borderRadius:8, background:'var(--c-blue-dim)', color:'#fff', fontFamily:'var(--ff-display)', fontWeight:700, fontSize:'.88rem', border:'none', cursor:'pointer', flexShrink:0 }}>
+      <header
+        className={scrolled || mobileOpen ? 'navbar-scrolled' : ''}
+        style={{ position: 'fixed', top: 0, left: 0, right: 0, zIndex: 100, background: scrolled || mobileOpen ? undefined : 'var(--c-bg)' }}
+      >
+        <div style={{ maxWidth: 1180, margin: '0 auto', padding: '0 1.25rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: 72, gap: 12 }}>
+          <button
+            type="button"
+            onClick={() => scrollTo('hero')}
+            aria-label={locale === 'en' ? 'Back to top' : 'Retour en haut'}
+            style={{ width: '2.75rem', height: '2.75rem', borderRadius: 6, background: 'var(--c-blue-dim)', color: '#fff', fontFamily: 'var(--ff-display)', fontWeight: 700, fontSize: '1.05rem', border: 'none', cursor: 'pointer', flexShrink: 0 }}
+          >
             {initials}
           </button>
 
-          {/* Desktop nav — caché sur mobile via classe CSS .nav-links */}
-          <nav className="nav-links">
+          <nav className="nav-links" aria-label={locale === 'en' ? 'Main navigation' : 'Navigation principale'}>
             {LINKS.map((link) => (
-              <button key={link.id} onClick={()=>scrollTo(link.id)}
+              <button
+                key={link.id}
+                type="button"
+                onClick={() => scrollTo(link.id)}
                 className={`nav-link ${active === link.id ? 'active' : ''}`}
-                style={{ background:'none', border:'none', cursor:'pointer', padding:'.5rem .7rem', borderRadius:6, fontFamily:'var(--ff-body)', whiteSpace:'nowrap' }}>
+                style={{ background: 'none', border: 'none', cursor: 'pointer', fontFamily: 'var(--ff-body)', whiteSpace: 'nowrap' }}
+              >
                 {link.label}
               </button>
             ))}
           </nav>
 
-          {/* Controls */}
-          <div style={{ display:'flex', alignItems:'center', gap:8, marginLeft:'auto' }}>
-            {/* Locale switcher */}
-            <div style={{ display:'flex', gap:3, background:'var(--c-bg3)', borderRadius:8, padding:3, border:'1px solid var(--c-border)', flexShrink:0 }}>
-              {(['fr','en'] as const).map((l) => (
-                <button key={l} onClick={()=>switchLocale(l)}
-                  style={{ padding:'3px 10px', borderRadius:5, border:'none', cursor:l===locale?'default':'pointer', fontSize:'.68rem', fontWeight:700, textTransform:'uppercase' as const, background:locale===l?'var(--c-blue-dim)':'transparent', color:locale===l?'#fff':'var(--c-muted)', transition:'all .2s', fontFamily:'var(--ff-body)' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginLeft: 'auto' }}>
+            <div role="group" aria-label={locale === 'en' ? 'Language' : 'Langue'} style={{ display: 'flex', border: '1px solid var(--c-border)', borderRadius: 6, overflow: 'hidden', background: 'var(--c-bg2)' }}>
+              {(['fr', 'en'] as const).map((l) => (
+                <button
+                  key={l}
+                  type="button"
+                  onClick={() => switchLocale(l)}
+                  aria-pressed={locale === l}
+                  style={{ minWidth: '2.75rem', height: '2.75rem', border: 'none', cursor: locale === l ? 'default' : 'pointer', fontSize: '.95rem', fontWeight: 700, textTransform: 'uppercase', background: locale === l ? 'var(--c-blue-dim)' : 'transparent', color: locale === l ? '#fff' : 'var(--c-ink)', fontFamily: 'var(--ff-body)' }}
+                >
                   {l}
                 </button>
               ))}
             </div>
-            <ThemeBtn />
-            {/* Burger — visible sur mobile via classe CSS .nav-burger */}
-            <button onClick={()=>setMobileOpen(!mobileOpen)}
-              className="nav-burger"
-              style={{ background:'none', border:'1px solid var(--c-border)', borderRadius:6, padding:'.35rem', cursor:'pointer', color:'var(--c-muted)', alignItems:'center', flexShrink:0 }}>
-              {mobileOpen ? <X size={18}/> : <Menu size={18}/>}
+            <ThemeBtn locale={locale} />
+            <button
+              type="button"
+              className="nav-burger icon-btn"
+              onClick={() => setMobileOpen(!mobileOpen)}
+              aria-expanded={mobileOpen}
+              aria-label={mobileOpen ? (locale === 'en' ? 'Close menu' : 'Fermer le menu') : locale === 'en' ? 'Open menu' : 'Ouvrir le menu'}
+            >
+              {mobileOpen ? <X size={24} /> : <Menu size={24} />}
             </button>
           </div>
         </div>
       </header>
 
-      {/* Mobile menu */}
       {mobileOpen && (
-        <div style={{ position:'fixed', inset:0, zIndex:99 }}>
-          <div style={{ position:'absolute', inset:0, background:'rgba(0,0,0,0.5)' }} onClick={()=>setMobileOpen(false)} />
-          <nav style={{ position:'absolute', top:64, left:0, right:0, background:'var(--c-bg2)', borderBottom:'1px solid var(--c-border)', padding:'1rem', display:'flex', flexDirection:'column', gap:4, maxHeight:'calc(100vh - 64px)', overflowY:'auto' }}>
+        <div style={{ position: 'fixed', inset: 0, zIndex: 99 }}>
+          <div style={{ position: 'absolute', inset: 0, background: 'rgba(15,27,42,.55)' }} onClick={() => setMobileOpen(false)} />
+          <nav
+            aria-label={locale === 'en' ? 'Menu' : 'Menu'}
+            style={{ position: 'absolute', top: 72, left: 0, right: 0, background: 'var(--c-bg2)', borderBottom: '1px solid var(--c-border)', padding: '.5rem 1.25rem 1rem', display: 'flex', flexDirection: 'column', maxHeight: 'calc(100vh - 72px)', overflowY: 'auto' }}
+          >
             {LINKS.map((link) => (
-              <button key={link.id} onClick={()=>scrollTo(link.id)}
-                style={{ background:active===link.id?'rgba(9,105,218,0.08)':'none', border:'none', cursor:'pointer', padding:'.75rem 1rem', borderRadius:8, textAlign:'left', color:active===link.id?'var(--c-blue)':'var(--c-muted)', fontSize:'.9rem', fontWeight:500, fontFamily:'var(--ff-body)' }}>
+              <button
+                key={link.id}
+                type="button"
+                onClick={() => scrollTo(link.id)}
+                style={{ background: 'none', border: 'none', borderBottom: '1px solid var(--c-border)', cursor: 'pointer', padding: '1rem .25rem', textAlign: 'left', color: active === link.id ? 'var(--c-blue)' : 'var(--c-ink)', fontSize: '1.15rem', fontWeight: active === link.id ? 700 : 500, fontFamily: 'var(--ff-body)', minHeight: '3.25rem' }}
+              >
                 {link.label}
               </button>
             ))}

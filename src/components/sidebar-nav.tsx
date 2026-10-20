@@ -54,7 +54,7 @@ export function SidebarNav({ profile, activeSection, locale }: {
   const router   = useRouter();
   const pathname = usePathname();
 
-  /** Fix définitif — window.location.pathname = vraie URL navigateur, non altérée par next-intl */
+  /** Fix définitif - window.location.pathname = vraie URL navigateur, non altérée par next-intl */
   const switchLocale = (next: string) => {
     if (next === locale) return;
     const real = window.location.pathname;

@@ -75,7 +75,7 @@ export function Footer() {
 
         {/* Bottom */}
         <div className="mt-10 flex flex-wrap items-center justify-between gap-3 border-t border-border-light pt-6 text-xs text-muted-light dark:border-border-dark dark:text-muted-dark">
-          <p>© {year} Hotègni Diègue HOUNDOKINNOU — {t('rights')}</p>
+          <p>© {year} Hotègni Diègue HOUNDOKINNOU - {t('rights')}</p>
           <p className="flex items-center gap-1">
             Fait avec <Heart size={12} className="text-red-500 fill-red-500" /> à Lokossa, Bénin
           </p>

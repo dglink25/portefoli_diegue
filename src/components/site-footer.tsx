@@ -1,3 +1,4 @@
+"use client";
 import { Github, Linkedin, Twitter, Mail, MessageCircle, Globe, Instagram, Facebook } from 'lucide-react';
 import type { Profile } from '@/types';
 import type { LucideIcon } from 'lucide-react';
@@ -58,7 +59,7 @@ export function SiteFooter({ profile }: { profile: Profile | null }) {
             </div>
           </div>
 
-          {/* Réseaux sociaux — depuis social_links du profil */}
+          {/* Réseaux sociaux - depuis social_links du profil */}
           <div>
             <p style={{ fontSize: '0.68rem', fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase' as const, color: 'var(--c-muted)', marginBottom: '0.75rem' }}>
               Réseaux sociaux

@@ -36,7 +36,7 @@ export function HeroScene() {
     accent.position.set(0, 5, 0);
     scene.add(ambient, sun, rim, accent);
 
-    /* ── Instanced mesh — wave grid ── */
+    /* ── Instanced mesh - wave grid ── */
     const COLS = 26, ROWS = 16;
     const COUNT = COLS * ROWS;
     const SPACING = 0.7;

@@ -181,7 +181,7 @@ export function ContactSection({ profile }: { profile: Profile | null }) {
               ))}
             </div>
 
-            {/* CTA — ouvre le modal Gmail */}
+            {/* CTA - ouvre le modal Gmail */}
             <div style={{ background:'var(--c-bg2)', border:'1px solid var(--c-border)', borderRadius:14, padding:'1.5rem' }}>
               <h3 style={{ fontFamily:'var(--ff-display)', fontSize:'.95rem', fontWeight:700, color:'var(--c-ink)', marginBottom:'.5rem' }}>Travaillons ensemble</h3>
               <p style={{ fontSize:'.82rem', color:'var(--c-muted)', marginBottom:'1rem', lineHeight:1.6 }}>

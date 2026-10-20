@@ -1,3 +1,4 @@
+"use client";
 import { Briefcase, MapPin } from 'lucide-react';
 import type { Experience } from '@/types';
 
@@ -36,7 +37,7 @@ export function ExperienceSection({ experiences, locale }: { experiences: Experi
                     {/* Date + Location */}
                     <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: 8, marginBottom: '0.75rem' }}>
                       <span style={{ fontSize: '0.76rem', color: 'var(--c-blue)', fontWeight: 600, background: 'rgba(9,105,218,0.08)', border: '1px solid rgba(9,105,218,0.2)', borderRadius: 20, padding: '2px 10px' }}>
-                        {fmt(exp.start_date, locale)} — {exp.end_date ? fmt(exp.end_date, locale) : 'Aujourd\'hui'}
+                        {fmt(exp.start_date, locale)} - {exp.end_date ? fmt(exp.end_date, locale) : 'Aujourd\'hui'}
                       </span>
                       {exp.location && (
                         <span style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: '0.76rem', color: 'var(--c-muted)' }}>

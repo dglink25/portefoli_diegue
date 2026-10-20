@@ -77,7 +77,7 @@ export default function SkillsAdminPage() {
         {/* ── Liste ── */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
           <p style={{ fontSize: '0.8rem', color: 'var(--c-muted)', marginBottom: 4 }}>
-            {skills.length} compétence(s) — cliquez sur <Pencil size={12} style={{ display:'inline', verticalAlign:'middle' }}/> pour modifier
+            {skills.length} compétence(s) - cliquez sur <Pencil size={12} style={{ display:'inline', verticalAlign:'middle' }}/> pour modifier
           </p>
 
           {skills.length === 0 && (

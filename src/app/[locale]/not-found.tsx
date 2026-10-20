@@ -1,77 +1,86 @@
+'use client';
+
 import Link from 'next/link';
-import { Home, ArrowLeft, Search } from 'lucide-react';
+import { Home, ArrowLeft } from 'lucide-react';
+
+const QUICK_LINKS = [
+  { href: '/#about', label: 'À propos' },
+  { href: '/#projects', label: 'Projets' },
+  { href: '/#skills', label: 'Compétences' },
+  { href: '/#contact', label: 'Contact' },
+];
 
 export default function NotFound() {
   return (
-    <div style={{ minHeight:'100vh', background:'var(--c-bg)', display:'flex', alignItems:'center', justifyContent:'center', padding:'2rem', fontFamily:'var(--ff-body)' }}>
-      <div style={{ maxWidth:520, width:'100%', textAlign:'center' }}>
-
-        {/* Code 404 stylisé */}
-        <div style={{ position:'relative', marginBottom:'2rem' }}>
-          <p style={{
-            fontFamily:'var(--ff-display)', fontSize:'clamp(7rem,20vw,10rem)',
-            fontWeight:900, color:'var(--c-bg3)', lineHeight:1,
-            userSelect:'none', letterSpacing:'-0.05em',
-          }}>
-            404
-          </p>
-          <div style={{
-            position:'absolute', top:'50%', left:'50%',
-            transform:'translate(-50%,-50%)',
-            width:80, height:80, borderRadius:'50%',
-            background:'rgba(9,105,218,.1)', border:'2px solid rgba(9,105,218,.2)',
-            display:'flex', alignItems:'center', justifyContent:'center',
-          }}>
-            <Search size={32} strokeWidth={1.5} style={{ color:'var(--c-blue)' }}/>
-          </div>
-        </div>
-
-        {/* Message */}
-        <h1 style={{ fontFamily:'var(--ff-display)', fontSize:'clamp(1.4rem,3vw,1.8rem)', fontWeight:700, color:'var(--c-ink)', marginBottom:'.75rem' }}>
-          Page introuvable
-        </h1>
-        <p style={{ fontSize:'.95rem', color:'var(--c-muted)', lineHeight:1.7, marginBottom:'2.5rem', maxWidth:380, margin:'0 auto 2.5rem' }}>
-          La page que vous cherchez a peut-être été déplacée, renommée ou n&apos;existe pas.
+    <main
+      style={{
+        minHeight: '100vh',
+        background: 'var(--c-bg)',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: '2rem 1.25rem',
+      }}
+    >
+      <div style={{ maxWidth: 560, width: '100%' }}>
+        <p
+          className="anim-fade-up-1"
+          style={{
+            fontFamily: 'var(--ff-display)',
+            fontSize: 'clamp(5rem, 18vw, 8rem)',
+            fontWeight: 700,
+            color: 'var(--c-blue)',
+            lineHeight: 1,
+          }}
+        >
+          404
         </p>
 
-        {/* Actions */}
-        <div style={{ display:'flex', flexWrap:'wrap', gap:'1rem', justifyContent:'center' }}>
-          <Link href="/"
-            style={{ display:'inline-flex', alignItems:'center', gap:8, padding:'.8rem 1.75rem', borderRadius:10, background:'var(--c-blue-dim)', color:'#fff', textDecoration:'none', fontSize:'.875rem', fontWeight:700, fontFamily:'var(--ff-body)', transition:'background .2s' }}
-            onMouseEnter={(e)=>(e.currentTarget.style.background='var(--c-blue)')}
-            onMouseLeave={(e)=>(e.currentTarget.style.background='var(--c-blue-dim)')}>
-            <Home size={16}/> Retour à l&apos;accueil
+        <h1
+          className="anim-fade-up-2"
+          style={{ fontSize: 'clamp(1.8rem, 4vw, 2.4rem)', color: 'var(--c-ink)', marginTop: '1rem' }}
+        >
+          Page introuvable
+        </h1>
+        <p
+          className="anim-fade-up-3"
+          style={{ fontSize: '1.1rem', color: 'var(--c-muted)', marginTop: '.75rem' }}
+        >
+          L&apos;adresse saisie n&apos;existe pas ou a été déplacée. Retournez à l&apos;accueil ou
+          utilisez l&apos;un des liens ci-dessous.
+        </p>
+
+        <div
+          className="anim-fade-up-4"
+          style={{ display: 'flex', flexWrap: 'wrap', gap: '1rem', marginTop: '2rem' }}
+        >
+          <Link href="/" className="btn-primary">
+            <Home size={20} aria-hidden /> Retour à l&apos;accueil
           </Link>
-          <button onClick={() => history.back()}
-            style={{ display:'inline-flex', alignItems:'center', gap:8, padding:'.8rem 1.75rem', borderRadius:10, border:'1px solid var(--c-border)', background:'transparent', color:'var(--c-ink)', fontSize:'.875rem', fontWeight:600, fontFamily:'var(--ff-body)', cursor:'pointer', transition:'all .2s' }}
-            onMouseEnter={(e)=>{ const el=e.currentTarget; el.style.borderColor='var(--c-blue)'; el.style.color='var(--c-blue)'; }}
-            onMouseLeave={(e)=>{ const el=e.currentTarget; el.style.borderColor='var(--c-border)'; el.style.color='var(--c-ink)'; }}>
-            <ArrowLeft size={16}/> Page précédente
+          <button type="button" onClick={() => history.back()} className="btn-outline">
+            <ArrowLeft size={20} aria-hidden /> Page précédente
           </button>
         </div>
 
-        {/* Liens rapides */}
-        <div style={{ marginTop:'3rem', paddingTop:'2rem', borderTop:'1px solid var(--c-border)' }}>
-          <p style={{ fontSize:'.78rem', color:'var(--c-muted)', marginBottom:'1rem', textTransform:'uppercase', letterSpacing:'.1em', fontWeight:700 }}>
-            Pages populaires
+        <nav
+          aria-label="Sections du site"
+          className="anim-fade-up-5"
+          style={{ marginTop: '3rem', paddingTop: '1.5rem', borderTop: '1px solid var(--c-border)' }}
+        >
+          <p style={{ fontSize: '1rem', fontWeight: 600, color: 'var(--c-ink)', marginBottom: '1rem' }}>
+            Aller directement à
           </p>
-          <div style={{ display:'flex', flexWrap:'wrap', gap:'.5rem', justifyContent:'center' }}>
-            {[
-              { href:'/#about',      label:'À propos' },
-              { href:'/#projects',   label:'Projets' },
-              { href:'/#skills',     label:'Compétences' },
-              { href:'/#contact',    label:'Contact' },
-            ].map(({ href, label }) => (
-              <Link key={href} href={href}
-                style={{ padding:'.4rem .875rem', borderRadius:20, border:'1px solid var(--c-border)', background:'var(--c-bg2)', color:'var(--c-muted)', textDecoration:'none', fontSize:'.78rem', fontWeight:500, transition:'all .2s', fontFamily:'var(--ff-body)' }}
-                onMouseEnter={(e)=>{ const el=e.currentTarget as HTMLElement; el.style.borderColor='var(--c-blue)'; el.style.color='var(--c-blue)'; }}
-                onMouseLeave={(e)=>{ const el=e.currentTarget as HTMLElement; el.style.borderColor='var(--c-border)'; el.style.color='var(--c-muted)'; }}>
-                {label}
-              </Link>
+          <ul style={{ display: 'flex', flexWrap: 'wrap', gap: '.75rem', listStyle: 'none' }}>
+            {QUICK_LINKS.map(({ href, label }) => (
+              <li key={href}>
+                <Link href={href} className="tech-badge" style={{ fontSize: '1rem', padding: '.5rem 1rem', textDecoration: 'none' }}>
+                  {label}
+                </Link>
+              </li>
             ))}
-          </div>
-        </div>
+          </ul>
+        </nav>
       </div>
-    </div>
+    </main>
   );
 }

@@ -30,7 +30,7 @@ async function sendEmail(full_name: string, email: string, subject: string | nul
     const html = `
       <div style="font-family:Inter,sans-serif;max-width:560px;margin:0 auto;padding:24px">
         <div style="background:#0550ae;border-radius:12px 12px 0 0;padding:20px 24px">
-          <h1 style="color:#fff;margin:0;font-size:18px;font-weight:700">Nouveau message — Portfolio</h1>
+          <h1 style="color:#fff;margin:0;font-size:18px;font-weight:700">Nouveau message - Portfolio</h1>
         </div>
         <div style="background:#f6f8fa;border:1px solid #d0d7de;border-top:none;border-radius:0 0 12px 12px;padding:24px">
           <p><strong>De :</strong> ${full_name} &lt;<a href="mailto:${email}">${email}</a>&gt;</p>

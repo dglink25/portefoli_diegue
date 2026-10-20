@@ -1,4 +1,4 @@
-# Portfolio — Next.js + PostgreSQL
+# Portfolio - Next.js + PostgreSQL
 
 Site portfolio avec backoffice integre, 100% Next.js (App Router, frontend + API routes)
 et une base PostgreSQL versionnee par migrations.
@@ -9,14 +9,14 @@ et une base PostgreSQL versionnee par migrations.
 
 ## Stack
 
-- **Next.js 14** (App Router) — frontend et backend (API routes) dans le meme projet
-- **PostgreSQL** + **node-pg-migrate** — schema evolutif, chaque changement = une migration versionnee
-- **NextAuth (Credentials)** — authentification email/mot de passe pour le backoffice
-- **next-intl** — i18n FR (par defaut) / EN, changeable par le visiteur
-- **next-themes** — theme clair (par defaut) / sombre, changeable par le visiteur
-- **lucide-react** — icones vectorielles (aucun emoji, aucun degrade)
-- **three.js** — animation du hero en instancing dynamique (grille de formes animees en temps reel)
-- **Docker / docker-compose** — l'ensemble du projet (app + base de donnees) est conteneurise
+- **Next.js 14** (App Router) - frontend et backend (API routes) dans le meme projet
+- **PostgreSQL** + **node-pg-migrate** - schema evolutif, chaque changement = une migration versionnee
+- **NextAuth (Credentials)** - authentification email/mot de passe pour le backoffice
+- **next-intl** - i18n FR (par defaut) / EN, changeable par le visiteur
+- **next-themes** - theme clair (par defaut) / sombre, changeable par le visiteur
+- **lucide-react** - icones vectorielles (aucun emoji, aucun degrade)
+- **three.js** - animation du hero en instancing dynamique (grille de formes animees en temps reel)
+- **Docker / docker-compose** - l'ensemble du projet (app + base de donnees) est conteneurise
 
 ## Demarrage avec Docker (recommande)
 
@@ -79,3 +79,20 @@ soumis n'est **pas visible immediatement** : il apparait dans `/admin/reviews` e
 de validation, pour eviter le spam. Une fois publie, il apparait sur le site avec la
 moyenne des notes et la date. Ce comportement peut etre ajuste dans
 `src/app/api/reviews/route.ts` si vous preferez une publication immediate.
+
+
+
+déploiemen
+
+
+
+NODE_OPTIONS="--dns-result-order=ipv4first" npm run build
+rm -rf .next/standalone/public .next/standalone/.next/static
+cp -r public .next/standalone/public
+mkdir -p .next/standalone/.next
+cp -r .next/static .next/standalone/.next/static
+rsync -avz --delete \
+  --exclude '.env' \
+  --exclude 'public/uploads' \
+  .next/standalone/ \
+  diegue@ssh-diegue.alwaysdata.net:~/portefolio/

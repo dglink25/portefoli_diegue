@@ -1,46 +1,44 @@
-import {
-  Monitor, Brain, Cpu, Server, Rocket, Users, GraduationCap, Globe2,
-} from 'lucide-react';
+import { Monitor, Brain, Cpu, Server, Rocket, Users, GraduationCap, Globe2 } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 
-interface Expertise { icon: LucideIcon; title: string; desc: string; }
+interface Expertise { icon: LucideIcon; title: string; desc: string }
 
 const EXPERTISES: Expertise[] = [
-  { icon: Monitor,        title: 'Applications Web & Mobile',  desc: 'Interfaces modernes et réactives avec React, Next.js, Flutter et React Native. UX soignée et performances optimisées.' },
-  { icon: Brain,          title: 'IA & Automatisation',        desc: 'Solutions d\'intelligence artificielle, modèles prédictifs, intégration de modèles IA et automatisation de processus métier.' },
-  { icon: Cpu,            title: 'IoT & Robotique',            desc: 'Conception de circuits programmables, initiation Arduino, systèmes embarqués et déploiement de solutions IoT.' },
-  { icon: Server,         title: 'APIs & Backends',            desc: 'Conception d\'APIs REST robustes avec FastAPI, Express, Laravel. Architecture sécurisée et scalable.' },
-  { icon: Rocket,         title: 'DevOps & Déploiement',       desc: 'Containerisation Docker, CI/CD, déploiement cloud. Gestion des infrastructures et maintenance serveurs.' },
-  { icon: Users,          title: 'Leadership & Management',    desc: 'Direction d\'organisations tech à l\'échelle nationale. Coordination d\'équipes, planification et gestion de projets agile.' },
-  { icon: GraduationCap,  title: 'Formation & Mentorat',       desc: 'Formation de développeurs, encadrement de stagiaires, organisation de workshops et d\'événements tech.' },
-  { icon: Globe2,         title: 'Communautés Tech',           desc: 'Animation de communautés de développeurs, organisation d\'événements tech et hackathons, réseau Afrique de l\'Ouest.' },
+  { icon: Monitor, title: 'Applications web et mobiles', desc: "Interfaces modernes avec React, Next.js, Flutter et React Native, pensées pour l'ergonomie et la performance." },
+  { icon: Brain, title: 'IA et automatisation', desc: "Intégration de modèles d'intelligence artificielle, modèles prédictifs et automatisation de processus métier." },
+  { icon: Cpu, title: 'IoT et systèmes embarqués', desc: 'Conception de circuits programmables, Arduino, systèmes embarqués et déploiement de solutions IoT.' },
+  { icon: Server, title: 'APIs et back-ends', desc: "Conception d'APIs REST avec FastAPI, Express et Laravel, avec une architecture sécurisée et évolutive." },
+  { icon: Rocket, title: 'DevOps et déploiement', desc: 'Conteneurisation avec Docker, intégration continue, déploiement cloud et maintenance de serveurs.' },
+  { icon: Users, title: 'Leadership et gestion de projet', desc: "Direction d'organisations technologiques, coordination d'équipes et conduite de projets en méthode agile." },
+  { icon: GraduationCap, title: 'Formation et mentorat', desc: 'Formation de développeurs, encadrement de stagiaires, organisation d’ateliers et d’événements techniques.' },
+  { icon: Globe2, title: 'Communautés techniques', desc: "Animation de communautés de développeurs, organisation de hackathons, réseau en Afrique de l'Ouest." },
 ];
 
 export function ExpertisesSection() {
   return (
-    <section id="expertises" style={{ padding: '5rem 0', borderTop: '1px solid var(--c-border)', background: 'var(--c-bg3)' }}>
-      <div style={{ maxWidth: 1200, margin: '0 auto', padding: '0 2rem' }}>
-        <div className="reveal" style={{ marginBottom: '3rem' }}>
-          <p className="sec-label">EXPERTISES</p>
-          <h2 className="sec-title">Ce que je fais</h2>
-          <div className="sec-divider" />
+    <section id="expertises" style={{ borderTop: '1px solid var(--c-border)', background: 'var(--c-bg)' }}>
+      <div className="sec-pad">
+        <div className="reveal" style={{ marginBottom: '2.5rem' }}>
+          <p className="sec-label">Expertises</p>
+          <h2 className="sec-title">Domaines d&apos;intervention</h2>
+          <div className="sec-divider" style={{ marginBottom: 0 }} />
         </div>
 
-        <div className="reveal expertises-grid">
+        <ul className="expertises-grid" style={{ listStyle: 'none' }}>
           {EXPERTISES.map(({ icon: Icon, title, desc }, idx) => (
-            <div
+            <li
               key={title}
-              className="exp-card"
-              style={{ transitionDelay: `${idx * 40}ms` }}
+              className="reveal card"
+              style={{ transitionDelay: `${idx * 50}ms`, maxWidth: 'none', display: 'flex', flexDirection: 'column', gap: '.75rem' }}
             >
-              <div style={{ width: 44, height: 44, borderRadius: 10, background: 'rgba(9,105,218,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '1rem', color: 'var(--c-blue)', flexShrink: 0 }}>
-                <Icon size={22} strokeWidth={1.75} />
+              <div className="icon-box">
+                <Icon size={26} strokeWidth={1.75} aria-hidden />
               </div>
-              <h3 style={{ fontFamily: 'var(--ff-display)', fontSize: '0.95rem', fontWeight: 700, color: 'var(--c-ink)', marginBottom: '0.5rem' }}>{title}</h3>
-              <p style={{ fontSize: '0.83rem', lineHeight: 1.65, color: 'var(--c-muted)' }}>{desc}</p>
-            </div>
+              <h3 style={{ fontSize: '1.2rem' }}>{title}</h3>
+              <p style={{ fontSize: '1.02rem', lineHeight: 1.65, color: 'var(--c-muted)' }}>{desc}</p>
+            </li>
           ))}
-        </div>
+        </ul>
       </div>
     </section>
   );

@@ -1,141 +1,96 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import { Mail, Phone, MapPin, Briefcase, ChevronDown } from 'lucide-react';
+import { Mail, Phone, MapPin, Briefcase } from 'lucide-react';
 import type { Profile } from '@/types';
-import type { Stat } from '@/app/[locale]/page';
-import { HeroScene } from './hero-scene';
 
-const ROLES_FR = ['Développeur Full-Stack', 'Passionné IA & IoT', 'Tech Entrepreneur', 'Créateur de solutions'];
-const ROLES_EN = ['Full-Stack Developer', 'AI & IoT Enthusiast', 'Tech Entrepreneur', 'Solution Creator'];
+export function HeroSection({ profile, locale }: { profile: Profile | null; locale: string }) {
+  const en = locale === 'en';
 
-export function HeroSection({ profile, locale, stats }: { profile: Profile | null; locale: string; stats: Stat[] }) {
-  const ROLES = locale === 'en' ? ROLES_EN : ROLES_FR;
-  const [roleIdx, setRoleIdx] = useState(0);
-  const [typed, setTyped]     = useState('');
-  const [deleting, setDeleting] = useState(false);
+  const name = profile?.full_name || 'Hotègni Diègue HOUNDOKINNOU';
+  const title = en
+    ? profile?.title_en || 'Electrical and Computer Engineer'
+    : profile?.title_fr || 'Ingénieur en génie électrique et informatique';
+  const bio = en
+    ? profile?.bio_en ||
+      'Graduate in Electrical Engineering and Computer Science from INSTI-Lokossa. I design web and mobile applications and IoT solutions.'
+    : profile?.bio_fr ||
+      "Diplômé en Génie Électrique et Informatique à l'INSTI-Lokossa. Je conçois des applications web et mobiles et des solutions IoT.";
+  const email = profile?.email || 'dondiegue21@gmail.com';
+  const photo = profile?.hero_image_url || profile?.avatar_url || null;
 
-  useEffect(() => {
-    const cur = ROLES[roleIdx];
-    let t: ReturnType<typeof setTimeout>;
-    if (!deleting && typed.length < cur.length)      t = setTimeout(() => setTyped(cur.slice(0, typed.length + 1)), 65);
-    else if (!deleting)                              t = setTimeout(() => setDeleting(true), 2200);
-    else if (deleting && typed.length > 0)           t = setTimeout(() => setTyped(typed.slice(0, -1)), 38);
-    else { setDeleting(false); setRoleIdx((i) => (i + 1) % ROLES.length); }
-    return () => clearTimeout(t);
-  }, [typed, deleting, roleIdx, ROLES]);
+  const infos = [
+    { Icon: Mail, text: email, href: `mailto:${email}` },
+    { Icon: Phone, text: '+229 01 94 11 94 76', href: 'tel:+22901941194' },
+    { Icon: MapPin, text: profile?.location || 'Lokossa, Bénin', href: null },
+    { Icon: Briefcase, text: en ? 'On-site or remote' : 'Présentiel ou télétravail', href: null },
+  ];
 
-  const name  = profile?.full_name || 'Hotègni Diègue HOUNDOKINNOU';
-  const title = locale === 'en' ? (profile?.title_en || 'Full-Stack Developer & AI · IoT') : (profile?.title_fr || 'Développeur Full-Stack & IA · IoT');
-  const bio   = locale === 'en'
-    ? (profile?.bio_en || 'Graduate in Electrical Engineering and Computer Science from INSTI-Lokossa. Passionate about AI and IoT, I design modern web/mobile applications and innovative solutions.')
-    : (profile?.bio_fr || 'Diplômé en Génie Électrique et Informatique à l\'INSTI-Lokossa. Passionné par l\'IA et l\'IoT, je conçois des applications web/mobiles modernes et des solutions innovantes.');
+  const goTo = (id: string) => document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
 
   return (
-    <section id="hero" style={{ position: 'relative', minHeight: '100vh', display: 'flex', alignItems: 'center', paddingTop: 64, overflow: 'hidden', background: 'var(--c-bg)' }}>
-      <HeroScene />
-      <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(135deg, var(--c-bg) 0%, color-mix(in srgb, var(--c-bg) 80%, transparent) 55%, transparent 100%)', pointerEvents: 'none' }} />
-
-      {/* Responsive grid via CSS class */}
-      <div className="hero-grid" style={{ position: 'relative', zIndex: 1 }}>
-
-        {/* ── LEFT ── */}
+    <section id="hero" style={{ background: 'var(--c-bg)' }}>
+      <div className="hero-grid" style={{ paddingTop: '7.5rem' }}>
         <div>
-          {/* Badge */}
-          <div className="anim-fade-up-1" style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: 'rgba(9,105,218,0.08)', border: '1px solid rgba(9,105,218,0.25)', borderRadius: 20, padding: '6px 14px', marginBottom: '1.25rem' }}>
-            <span style={{ width: 7, height: 7, borderRadius: '50%', background: 'var(--c-blue)', display: 'inline-block', animation: 'pulse-glow 2s infinite' }} />
-            <span style={{ fontSize: '0.68rem', fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase' as const, color: 'var(--c-blue)' }}>
-              {locale === 'en' ? 'HELLO, I AM' : 'BONJOUR, JE SUIS'}
-            </span>
-          </div>
+          <p className="anim-fade-up-1 sec-label">{en ? 'Portfolio' : 'Portfolio'}</p>
 
-          {/* Name */}
-          <h1 className="anim-fade-up-2" style={{ fontFamily: 'var(--ff-display)', fontSize: 'clamp(1.8rem, 4vw, 3.2rem)', fontWeight: 700, lineHeight: 1.15, marginBottom: '0.5rem', color: 'var(--c-ink)' }}>
-            {name.split(' ').slice(0, 2).join(' ')}<br />
-            <span className="grad-text">{name.split(' ').slice(2).join(' ')}</span>
+          <h1
+            className="anim-fade-up-2"
+            style={{ fontSize: 'clamp(2.25rem, 5.5vw, 3.75rem)', fontWeight: 600, lineHeight: 1.1, color: 'var(--c-ink)' }}
+          >
+            {name}
           </h1>
 
-          {/* Typewriter */}
-          <div className="anim-fade-up-3" style={{ display: 'flex', alignItems: 'center', gap: 4, marginBottom: '1.25rem', minHeight: '2rem' }}>
-            <span style={{ fontSize: 'clamp(0.95rem, 1.8vw, 1.25rem)', fontWeight: 500, color: 'var(--c-muted)' }}>{typed}</span>
-            <span className="cursor-blink" style={{ fontSize: '1.1rem', color: 'var(--c-blue)' }}>|</span>
+          <p
+            className="anim-fade-up-3"
+            style={{ marginTop: '1rem', fontFamily: 'var(--ff-display)', fontSize: 'clamp(1.25rem, 2.6vw, 1.7rem)', color: 'var(--c-blue)', fontWeight: 500 }}
+          >
+            {title}
+          </p>
+
+          <p className="anim-fade-up-3" style={{ marginTop: '1.5rem', fontSize: '1.15rem', lineHeight: 1.75, color: 'var(--c-muted)' }}>
+            {bio}
+          </p>
+
+          <div className="anim-fade-up-4" style={{ display: 'flex', flexWrap: 'wrap', gap: '1rem', marginTop: '2rem' }}>
+            <button type="button" className="btn-primary" onClick={() => goTo('projects')}>
+              {en ? 'View my projects' : 'Voir mes projets'}
+            </button>
+            <button type="button" className="btn-outline" onClick={() => goTo('contact')}>
+              <Mail size={20} aria-hidden /> {en ? 'Contact me' : 'Me contacter'}
+            </button>
           </div>
 
-          {/* Bio */}
-          <p className="anim-fade-up-3" style={{ fontSize: '0.93rem', lineHeight: 1.75, color: 'var(--c-muted)', maxWidth: 560, marginBottom: '2rem' }}>{bio}</p>
-
-          {/* CTAs */}
-          <div className="anim-fade-up-4" style={{ display: 'flex', flexWrap: 'wrap', gap: '0.75rem', marginBottom: '2rem' }}>
-            <button className="btn-primary" onClick={() => document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth' })}>
-              {locale === 'en' ? 'View my projects' : 'Voir mes projets'}
-            </button>
-            <button className="btn-outline" onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}>
-              <Mail size={15} /> {locale === 'en' ? 'Contact me' : 'Me contacter'}
-            </button>
-          </div>
-
-          {/* Contact info */}
-          <div className="anim-fade-up-5" style={{ display: 'flex', flexWrap: 'wrap', gap: '1rem', marginBottom: '2.5rem' }}>
-            {[
-              { Icon: Mail,      text: profile?.email || 'dondiegue21@gmail.com', href: `mailto:${profile?.email || 'dondiegue21@gmail.com'}` },
-              { Icon: Phone,     text: '+229 01 94 11 94 76',                    href: 'tel:+22901941194' },
-              { Icon: MapPin,    text: profile?.location || 'Lokossa, Bénin',    href: null },
-              { Icon: Briefcase, text: locale === 'en' ? 'Remote / On-site' : 'Présentiel / Télétravail', href: null },
-            ].map(({ Icon, text, href }) => (
-              href
-                ? <a key={text} href={href} style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: '0.78rem', color: 'var(--c-muted)', textDecoration: 'none', transition: 'color 0.2s' }}
-                    onMouseEnter={(e) => (e.currentTarget.style.color = 'var(--c-blue)')}
-                    onMouseLeave={(e) => (e.currentTarget.style.color = 'var(--c-muted)')}>
-                    <Icon size={13} style={{ color: 'var(--c-blue)', flexShrink: 0 }} /> {text}
+          <ul
+            className="anim-fade-up-5"
+            style={{ listStyle: 'none', marginTop: '2.5rem', display: 'flex', flexDirection: 'column', gap: '.75rem' }}
+          >
+            {infos.map(({ Icon, text, href }) => (
+              <li key={text} style={{ display: 'flex', alignItems: 'center', gap: '.75rem', fontSize: '1.05rem', maxWidth: 'none' }}>
+                <Icon size={22} aria-hidden style={{ color: 'var(--c-blue)', flexShrink: 0 }} />
+                {href ? (
+                  <a href={href} className="link-quiet" style={{ color: 'var(--c-ink)', overflowWrap: 'anywhere' }}>
+                    {text}
                   </a>
-                : <span key={text} style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: '0.78rem', color: 'var(--c-muted)' }}>
-                    <Icon size={13} style={{ color: 'var(--c-blue)', flexShrink: 0 }} /> {text}
-                  </span>
+                ) : (
+                  <span style={{ color: 'var(--c-ink)' }}>{text}</span>
+                )}
+              </li>
             ))}
-          </div>
+          </ul>
+        </div>
 
-          {/* Stats dynamiques depuis DB */}
-          <div className="anim-fade-up-6 hero-stats">
-            {stats.map((s) => (
-              <div key={s.label_fr} style={{ textAlign: 'center' }}>
-                <p style={{ fontFamily: 'var(--ff-display)', fontSize: 'clamp(1.3rem,2.5vw,1.9rem)', fontWeight: 700, color: 'var(--c-blue)', lineHeight: 1 }}>
-                  {s.value}{s.suffix}
-                </p>
-                <p style={{ fontSize: '.65rem', color: 'var(--c-muted)', marginTop: 4, maxWidth: 80 }}>
-                  {locale === 'en' ? s.label_en : s.label_fr}
-                </p>
+        <div className="hero-photo anim-fade-up-3">
+          <div style={{ aspectRatio: '4 / 5', border: '1px solid var(--c-border)', borderRadius: 6, overflow: 'hidden', background: 'var(--c-bg3)' }}>
+            {photo ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img src={photo} alt={name} style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'top' }} />
+            ) : (
+              <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'var(--ff-display)', fontSize: '4rem', fontWeight: 600, color: 'var(--c-border)' }}>
+                DH
               </div>
-            ))}
+            )}
           </div>
         </div>
-
-        {/* ── RIGHT — Photo (desktop only) ── */}
-        <div className="anim-fade-up-3 anim-float hidden lg:flex" style={{ justifyContent: 'center', flexShrink: 0 }}>
-          <div style={{ position: 'relative', width: 260, height: 260 }}>
-            <div className="anim-spin-slow" style={{ position: 'absolute', inset: -8, borderRadius: '50%', border: '1.5px dashed var(--c-border)' }} />
-            <div style={{ position: 'absolute', inset: -16, borderRadius: '50%', border: '1px solid var(--c-border)', opacity: 0.4 }} />
-            <div className="anim-pulse-glow" style={{ width: '100%', height: '100%', borderRadius: '50%', overflow: 'hidden', border: '3px solid var(--c-blue)', background: 'var(--c-bg3)' }}>
-              {/* hero_image_url en priorité, sinon avatar_url, sinon placeholder */}
-              {(profile?.hero_image_url || profile?.avatar_url)
-                ? <img src={profile.hero_image_url || profile.avatar_url!} alt={profile.full_name} style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'top' }} /> // eslint-disable-line
-                : <div style={{ width: '100%', height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', background: 'var(--c-bg3)' }}>
-                    <span style={{ fontFamily: 'var(--ff-display)', fontSize: '3rem', fontWeight: 700, color: 'var(--c-border)' }}>DH</span>
-                    <span style={{ fontSize: '0.6rem', color: 'var(--c-muted)', marginTop: 8, textAlign: 'center', padding: '0 1rem' }}>
-                      {locale === 'en' ? 'Add photo via admin' : 'Ajoutez votre photo via l\'admin'}
-                    </span>
-                  </div>
-              }
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Scroll indicator */}
-      <div style={{ position: 'absolute', bottom: 24, left: '50%', transform: 'translateX(-50%)', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4, animation: 'float 2s ease-in-out infinite' }}>
-        <span style={{ fontSize: '0.6rem', color: 'var(--c-muted)', letterSpacing: '0.1em', textTransform: 'uppercase' as const }}>
-          {locale === 'en' ? 'Scroll' : 'Défiler'}
-        </span>
-        <ChevronDown size={18} style={{ color: 'var(--c-muted)' }} />
       </div>
     </section>
   );
